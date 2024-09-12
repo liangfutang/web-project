@@ -8,6 +8,12 @@ An Electron application with Vue
 
 ## Project Setup
 
+### init project
+
+```bash
+$ npm create @quick-start/electron@1.0.16 easychat-front
+```
+
 ### Install
 
 ```bash
