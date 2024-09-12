@@ -34,3 +34,9 @@ $ npm run build:mac
 # For Linux
 $ npm run build:linux
 ```
+
+### 安装sqlite3
+```bash
+$ npm install sqlite3@5.0.0 -s  
+$ npm install @types/sqlite3@3.1.8 -s
+```
