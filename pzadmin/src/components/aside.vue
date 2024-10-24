@@ -19,12 +19,6 @@
 </template>
 
 <script setup>
-import {
-  Document,
-  Menu as IconMenu,
-  Location,
-  Setting,
-} from '@element-plus/icons-vue'
 import TreeMenu from './treeMenu.vue';
 import { useRouter } from "vue-router"
 import { reactive } from "vue"
