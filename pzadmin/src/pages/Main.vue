@@ -1,21 +1,25 @@
 <template>
-  <div class="mb-4">
-    <el-button>Default</el-button>
-    <el-button type="primary">Primary</el-button>
-    <el-button type="success">Success</el-button>
-    <el-button type="info">Info</el-button>
-    <el-button type="warning">Warning</el-button>
-    <el-button type="danger">Danger</el-button>
+  <div class="common-layout">
+    <el-container>
+      <Aside />
+      <el-container>
+        <el-header>Header</el-header>
+        <el-main>Main</el-main>
+      </el-container>
+    </el-container>
   </div>
 </template>
 
-<script >
+<script setup>
+import Aside from '../components/aside.vue';
 
-export default {
-
-}
 </script>
 
-<style scoped>
-
+<style lang="less" scoped>
+.common-layout {
+    height: 100%;
+    .el-container {
+        height: 100%;
+    }
+}
 </style>
