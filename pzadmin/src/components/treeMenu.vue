@@ -2,7 +2,8 @@
     <div>
         <template v-for="(item) in props.meuData">
             <!-- 没有子菜单 -->
-            <el-menu-item 
+            <el-menu-item
+                @click="handleClick(item, `${props.index}-${item.meta.id}`)"
                 v-if="!item.children || item.children.length == 0"
                 :key="`${props.index}-${item.meta.id}`"
                 :index="`${props.index}-${item.meta.id}`"
@@ -30,7 +31,15 @@
 </template>
 
 <script setup>
+import { useRouter } from "vue-router"
+
 const props = defineProps(["index", "meuData"])
+
+const router = useRouter()
+// 点击菜单跳转
+const handleClick = (item, active) => {
+    router.push(item.meta.path)
+}
 </script>
 
 <style scoped>
