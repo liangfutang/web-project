@@ -8,7 +8,22 @@
 
     <!-- 右侧 -->
      <div class="header-right">
-      
+      <el-dropdown>
+        <div class="el-dropdown-link flex-box">
+          <el-avatar
+            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+          />
+          <p class="user-name">jack</p>
+          <el-icon class="el-icon--right">
+            <arrow-down />
+          </el-icon>
+        </div>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item command="cancel">退出</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
      </div>
   </div>
 </template>
@@ -38,8 +53,13 @@ const store = useStore()
     height: 100%;
   }
   .menu-shrink:hover {
-      background-color: #f5f5f5;
-      cursor: pointer;
+    background-color: #f5f5f5;
+    cursor: pointer;
+  }
+  .header-right {
+    .user-name {
+      margin-left: 10px;
     }
+  }
 }
 </style>
