@@ -1,5 +1,6 @@
 <template>
     <el-menu
+        :style="{width: '230px'}"
         active-text-color="#ffd04b"
         background-color="#545c64"
         class="aside-container"
@@ -9,16 +10,22 @@
         @close="handleClose"
       >
         <p class="log-lg">DIDI陪诊</p>
-        <TreeMenu></TreeMenu>
+        <TreeMenu :index="1" :menuData="menuData"></TreeMenu>
     </el-menu>
 </template>
 
 <script setup>
 import TreeMenu from './treeMenu.vue';
+import {useRouter} from 'vue-router'
+import {reactive} from 'vue'
+
+const router = useRouter()
+const menuData = reactive(router.options.routes[0].children)
 
 const handleOpen = () => {}
 const handleClose = () => {}
 </script>
+
 
 <style lang="less" scope>
 .aside-container {

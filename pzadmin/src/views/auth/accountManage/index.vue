@@ -1,6 +1,6 @@
 <template>
   <div>
-    dashboard
+    账号管理
   </div>
 </template>
 
