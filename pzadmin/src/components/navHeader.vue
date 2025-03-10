@@ -1,7 +1,8 @@
 <template>
   <div class="header-container">
     <div class="header-left flex-box">
-      <el-icon class="icon" size="20" @click="store.commit('collapseMenu')"><Fold /></el-icon>
+      <el-icon v-if="!isCollapse" class="icon" size="20" @click="store.commit('collapseMenu')"><Fold /></el-icon>
+      <el-icon v-else class="icon" size="20" @click="store.commit('collapseMenu')"><Expand /></el-icon>
     </div>
     <div class="header-right">
       <el-dropdown>
@@ -27,7 +28,10 @@
 
 <script setup>
 import {useStore} from 'vuex'
+import {computed} from 'vue'
+
 const store = useStore()
+const isCollapse = computed(() =>  store.state.menu.isCollapse)
 
 </script>
 
