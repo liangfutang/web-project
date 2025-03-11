@@ -4,10 +4,10 @@
       <el-icon v-if="!isCollapse" class="icon" size="20" @click="store.commit('collapseMenu')"><Fold /></el-icon>
       <el-icon v-else class="icon" size="20" @click="store.commit('collapseMenu')"><Expand /></el-icon>
       <ul class="flex-box">
-        <li v-for="item in selectMenu" :key="item.path" class="tab flex-box" :class="{selected: item.path === route.path}">
+        <li v-for="(item, index) in selectMenu" :key="item.path" class="tab flex-box" :class="{selected: item.path === route.path}">
           <el-icon size="12"><component :is="item.icon" /></el-icon>
           <router-link :to="item.path" class="text flex-box">{{item.name}}</router-link>
-          <el-icon size="12" class="close"><Close /></el-icon>
+          <el-icon size="12" class="close" @click="closeTag(item, index)"><Close /></el-icon>
         </li>
       </ul>
     </div>
@@ -37,12 +37,37 @@
 <script setup>
 import {useStore} from 'vuex'
 import {computed} from 'vue'
-import {useRoute} from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
 
 const store = useStore()
 const isCollapse = computed(() =>  store.state.menu.isCollapse)
 const selectMenu = computed(() => store.state.menu.selectMenu)
 const route = useRoute()
+const router = useRouter()
+
+const closeTag = (item, index) => {
+  // 先删除store中的该标签
+  store.commit('closeTag', item)
+  
+  // 再根据对应的需求跳转到对应的页面
+  // 如果删除的不是当前页
+  if (route.path !== item.path) {
+    return
+  }
+  // 如果删除的是当前页
+  const selectMenuData = selectMenu.value
+  // 最后一页  非最后一页
+  if (selectMenuData.length === index) {
+    if (!selectMenuData.length) {
+      router.push('/')
+    } else {
+      router.push(selectMenuData[index - 1].path)
+    }
+  } else {
+    router.push(selectMenuData[index].path)
+  }
+  
+}
 </script>
 
 <style lang="less" scoped>

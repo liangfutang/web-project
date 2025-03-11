@@ -15,6 +15,11 @@ const mutations = {
         if (state.selectMenu.findIndex(intem => intem.path === menu.path) === -1) {
             state.selectMenu.push(menu);
         }
+    },
+    // 关闭对应的tab选项，删除对应的存储
+    closeTag(state, menu) {
+        const index = state.selectMenu.findIndex(intem => intem.name === menu.name)
+        state.selectMenu.splice(index, 1)
     }
 }
 
