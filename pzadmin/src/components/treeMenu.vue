@@ -24,13 +24,16 @@
 
 <script setup>
 import {useRouter} from 'vue-router'
+import {useStore} from 'vuex'
 
 const {index:parentIndex, menuData} = defineProps(['index', 'menuData'])
 const router = useRouter()
+const store = useStore()
 
 const handleClick = (item, active) => {
     router.push(item.meta.path)
-    
+    // 将选中菜单放入到栈中
+    store.commit('addMenu', item.meta)
 }
 </script>
 

@@ -3,7 +3,15 @@
     <div class="header-left flex-box">
       <el-icon v-if="!isCollapse" class="icon" size="20" @click="store.commit('collapseMenu')"><Fold /></el-icon>
       <el-icon v-else class="icon" size="20" @click="store.commit('collapseMenu')"><Expand /></el-icon>
+      <ul class="flex-box">
+        <li v-for="item in selectMenu" :key="item.path" class="tab flex-box" :class="{selected: item.path === route.path}">
+          <el-icon size="12"><component :is="item.icon" /></el-icon>
+          <router-link :to="item.path" class="text flex-box">{{item.name}}</router-link>
+          <el-icon size="12" class="close"><Close /></el-icon>
+        </li>
+      </ul>
     </div>
+    
     <div class="header-right">
       <el-dropdown>
         <div class="el-dropdown-link flex-box">
@@ -29,10 +37,12 @@
 <script setup>
 import {useStore} from 'vuex'
 import {computed} from 'vue'
+import {useRoute} from 'vue-router'
 
 const store = useStore()
 const isCollapse = computed(() =>  store.state.menu.isCollapse)
-
+const selectMenu = computed(() => store.state.menu.selectMenu)
+const route = useRoute()
 </script>
 
 <style lang="less" scoped>
@@ -58,11 +68,43 @@ const isCollapse = computed(() =>  store.state.menu.isCollapse)
       background-color: #f5f5f5;
       cursor: pointer;
     }
+    .tab {
+      padding: 0 10px;
+      height: 100%;
+      .text {
+        margin: 0 5px;
+      }
+      .close {
+        visibility: hidden;
+      }
+      &.selected{
+        a{
+          color: #409eff;
+        }
+        i{
+          color: #409eff;
+        }
+        background-color: #f5f5f5;
+      }
+    }
+    .tab:hover {
+      background-color: #f5f5f5;
+      .close{
+        visibility: inherit;
+        cursor: pointer;
+        color: #000;
+      }
+    }
   }
   .header-right {
     .user-name {
       margin-left: 10px;
     }
+  }
+  a {
+    height: 100%;
+    color: #333;
+    font-size: 15px;
   }
 }
 </style>
