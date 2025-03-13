@@ -10,7 +10,7 @@
         <el-link type="primary" @click="handleChange">{{ formType ? "返回登录" : "注册账号" }}</el-link>
       </div>
 
-      <el-form :model="formData" style="max-width: 600px" class="demo-ruleForm" :rules="rules">
+      <el-form :model="formData" ref="loginFormRef" style="max-width: 600px" class="demo-ruleForm" :rules="rules">
         <!-- 手机号 -->
         <el-form-item prop="userName">
           <el-input v-model="formData.userName" :prefix-icon="UserFilled" placeholder="手机号"/>
@@ -28,6 +28,10 @@
               </span>
             </template>
           </el-input>
+        </el-form-item>
+        <!-- 提交按钮 -->
+        <el-form-item>
+          <el-button type="primary" style="width: 100%" @click="submitForm(loginFormRef)">{{ formType ? "注册" : "登录" }}</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -117,6 +121,26 @@ const countdownChange = () => {
   clickFlag = true;
   // 发送获取验证码请求
   
+}
+
+// 表单提交
+const loginFormRef = ref()
+const submitForm = async (formEl) => {
+  if (!formEl) return
+  // 手动触发校验
+  await formEl.validate((valid) => {
+    if (valid) {
+      if (formType.value) {
+        // 注册请求
+        
+      } else {
+        // 登录请求
+
+      }
+    } else {
+      ElMessage.error("提交失败，请检查表单");
+    }
+  });
 }
 </script>
 
