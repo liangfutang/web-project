@@ -42,7 +42,9 @@
 import { ref, reactive } from 'vue'
 import { UserFilled, Lock } from '@element-plus/icons-vue'
 import { getCode, login, userAuthentication } from "../../api/index"
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const imgUrl = new URL('../../../public/login-head.png', import.meta.url)
 // 切换表单，0:登录 1:注册
 const formType = ref(0)
@@ -77,15 +79,9 @@ const passWordValidator = (rule, value, callback) => {
       : callback(new Error("密码为4-16位数字、字母、下划线"));
   }
 }
-const validCodeValidator = (rule, value, callback) => {
-  if (!value || !value.trim().length) {
-    callback(new Error("校验码不能为空"));
-  }
-}
 const rules = reactive({
   userName: [{validator: userNameValidator ,trigger: "blur",},],
-  passWord: [{validator: passWordValidator,trigger: "blur",},],
-  validCode: [{validator: validCodeValidator ,trigger: "blur",},],
+  passWord: [{validator: passWordValidator,trigger: "blur",},]
 })
 
 // 获取验证码响应式对象
@@ -136,11 +132,29 @@ const submitForm = async (formEl) => {
   await formEl.validate((valid) => {
     if (valid) {
       if (formType.value) {
-        // 注册请求
+        if (!formData.validCode || !formData.validCode.trim().length) {
+          return ElMessage.error("验证码不能为空");
+        }
         
+        // 注册请求
+        userAuthentication(formData).then(({data})=>{
+            if(data.code===10000){
+              ElMessage.success('注册成功,请登录')
+              formType.value = 0
+            }
+          })
       } else {
         // 登录请求
-
+        login(formData).then(({data})=>{
+            if(data.code===10000){
+              ElMessage.success('登录成功')
+              console.log(data,'data')
+              //将token和用户信息缓存到浏览器
+              localStorage.setItem('pz_token',data.data.token)
+              localStorage.setItem('pz_userInfo',JSON.stringify(data.data.userInfo))
+              router.push('/')
+            }
+          })
       }
     } else {
       ElMessage.error("提交失败，请检查表单");
