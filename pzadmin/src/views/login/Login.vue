@@ -10,17 +10,17 @@
         <el-link type="primary" @click="handleChange">{{ formType ? "返回登录" : "注册账号" }}</el-link>
       </div>
 
-      <el-form :model="formData" style="max-width: 600px" class="demo-ruleForm">
+      <el-form :model="formData" style="max-width: 600px" class="demo-ruleForm" :rules="rules">
         <!-- 手机号 -->
-        <el-form-item>
+        <el-form-item prop="userName">
           <el-input v-model="formData.userName" :prefix-icon="UserFilled" placeholder="手机号"/>
         </el-form-item>
         <!-- 密码 -->
-        <el-form-item>
+        <el-form-item prop="passWord">
           <el-input v-model="formData.passWord" :prefix-icon="Lock" type="password" placeholder="密码"/>
         </el-form-item>
         <!-- 校验码 -->
-        <el-form-item>
+        <el-form-item prop="validCode">
           <el-input v-if="formType" v-model="formData.validCode" :prefix-icon="Lock" placeholder="验证码">
             <template #append>
               <span @click="countdownChange" style="cursor: pointer">
@@ -49,6 +49,39 @@ const formData = reactive({
 const handleChange = () => {
   formType.value = formType.value ? 0 : 1;
 }
+
+// 表单校验
+const userNameValidator = (rule, value, callback) => {
+  if (!value || !value.trim().length) {
+    callback(new Error("手机号不能为空"));
+  } else {
+    const phoneReg =
+      /^1(3[0-9]|4[01456879]|5[0-35-9]|6[2567]|7[0-8]|8[0-9]|9[0-35-9])\d{8}$/;
+    phoneReg.test(value)
+      ? callback()
+      : callback(new Error("请输入正确的手机号"));
+  }
+}
+const passWordValidator = (rule, value, callback) => {
+  if (!value || !value.trim().length) {
+    callback(new Error("密码不能为空"));
+  } else {
+    const passReg = /^[a-zA-Z0-9_-]{4,16}$/;
+    passReg.test(value)
+      ? callback()
+      : callback(new Error("密码为4-16位数字、字母、下划线"));
+  }
+}
+const validCodeValidator = (rule, value, callback) => {
+  if (!value || !value.trim().length) {
+    callback(new Error("校验码不能为空"));
+  }
+}
+const rules = reactive({
+  userName: [{validator: userNameValidator ,trigger: "blur",},],
+  passWord: [{validator: passWordValidator,trigger: "blur",},],
+  validCode: [{validator: validCodeValidator ,trigger: "blur",},],
+})
 
 // 获取验证码响应式对象
 const countdown = reactive({
