@@ -41,6 +41,7 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { UserFilled, Lock } from '@element-plus/icons-vue'
+import { getCode, login, userAuthentication } from "../../api/index"
 
 const imgUrl = new URL('../../../public/login-head.png', import.meta.url)
 // 切换表单，0:登录 1:注册
@@ -120,7 +121,11 @@ const countdownChange = () => {
 
   clickFlag = true;
   // 发送获取验证码请求
-  
+  getCode({tel:formData.userName}).then(({data})=>{
+    if(data.code===10000){
+      ElMessage.success('发送成功')
+      }
+  })
 }
 
 // 表单提交
