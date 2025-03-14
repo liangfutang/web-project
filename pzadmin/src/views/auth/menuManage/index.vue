@@ -19,8 +19,8 @@
             show-checkbox
             :data="permissionData"
             node-key="id"
-            :default-expanded-keys="[2]"
-            :default-checked-keys="defaultKeys"
+            :default-expanded-keys="defaultExpandedKeys"
+            :default-checked-keys="defaultCheckKeys"
           />
         </el-form-item>
       </el-form>
@@ -51,7 +51,8 @@ onMounted(() => {
 
 const dialogVisible = ref(false)
 const permissionData = ref([])
-const defaultKeys = [4, 5];
+const defaultCheckKeys = [4, 5];
+const defaultExpandedKeys = [2];
 const treeRef = ref();
 
 const formData = reactive({
