@@ -17,11 +17,11 @@
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="passWord">
-          <el-input v-model="formData.passWord" :prefix-icon="Lock" type="password" placeholder="密码"/>
+          <el-input v-model="formData.passWord" :prefix-icon="Lock" type="password" placeholder="密码" @keyup.enter="submitForm(loginFormRef)"/>
         </el-form-item>
         <!-- 校验码 -->
         <el-form-item prop="validCode">
-          <el-input v-if="formType" v-model="formData.validCode" :prefix-icon="Lock" placeholder="验证码">
+          <el-input v-if="formType" v-model="formData.validCode" :prefix-icon="Lock" placeholder="验证码" @keyup.enter="submitForm(loginFormRef)">
             <template #append>
               <span @click="countdownChange" style="cursor: pointer">
                 {{ countdown.validText }}
