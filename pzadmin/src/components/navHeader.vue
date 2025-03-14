@@ -16,7 +16,7 @@
       <el-dropdown>
         <div class="el-dropdown-link flex-box">
           <el-avatar
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+            :src="userAvatar"
           />
           <p class="user-name">admin</p>
         </div>
@@ -44,6 +44,7 @@ const isCollapse = computed(() =>  store.state.menu.isCollapse)
 const selectMenu = computed(() => store.state.menu.selectMenu)
 const route = useRoute()
 const router = useRouter()
+const userAvatar = JSON.parse(localStorage.getItem('pz_userInfo')).avatar
 
 const closeTag = (item, index) => {
   // 先删除store中的该标签
