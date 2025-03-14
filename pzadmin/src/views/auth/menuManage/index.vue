@@ -6,9 +6,9 @@
       v-model="dialogVisible"
       title="添加权限"
       width="500"
-      :before-close="handleClose"
+      :before-close="beforeClose"
     >
-      <el-form :rules="formRules" :model="formData">
+      <el-form :rules="formRules" :model="formData" ref="formRef">
         <el-form-item prop="name" label="名称">
           <el-input v-model="formData.name"></el-input>
         </el-form-item>
@@ -19,7 +19,7 @@
             show-checkbox
             :data="permissionData"
             node-key="id"
-            :default-expanded-keys="defaultExpandedKeys"
+            :default-expanded-keys="[2]"
             :default-checked-keys="defaultCheckKeys"
           />
         </el-form-item>
@@ -27,10 +27,7 @@
       
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="dialogVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="dialogVisible = false">
-            Confirm
-          </el-button>
+          <el-button type="primary" @click="submitForm(formRef)">确认</el-button>
         </div>
       </template>
     </el-dialog>
@@ -39,7 +36,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import { userGetMenu } from '../../../api/index'
+import { userGetMenu, userSetMenu } from '../../../api/index'
 
 onMounted(() => {
   //菜单数据
@@ -52,11 +49,13 @@ onMounted(() => {
 const dialogVisible = ref(false)
 const permissionData = ref([])
 const defaultCheckKeys = [4, 5];
-const defaultExpandedKeys = [2];
 const treeRef = ref();
+const formRef = ref();
 
 const formData = reactive({
+  id: '',
   name: '',
+  permissions: ''
 })
 const formRules = reactive({
   name: [
@@ -64,8 +63,29 @@ const formRules = reactive({
   ],
 })
 
-const handleClose = () => {
-  dialogVisible.value = false
+const beforeClose = () => {
+  // 为右上角的关闭按钮服务，否则关不了对话框
+  dialogVisible.value = false;
+  //重置表单
+  formRef.value.resetFields();
+  //tree选择重置
+  treeRef.value.setCheckedKeys(defaultCheckKeys);
+}
+
+const submitForm = async (formEl) => {
+  if (!formEl) return
+  await formEl.validate((valid) => {
+    if (valid) {
+      dialogVisible.value = false;
+      const permissions = JSON.stringify(treeRef.value.getCheckedKeys());
+      userSetMenu({ name: formData.name, permissions, id: formData.id }).then(({ data }) => {
+         beforeClose()
+        //  getListData()
+       });
+    } else {
+      return false;
+    }
+  });
 }
 </script>
 
