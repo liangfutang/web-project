@@ -14,9 +14,13 @@
         </el-form-item>
         <el-form-item prop="name" label="权限">
           <el-tree
+            ref="treeRef"
             style="max-width: 600px"
             show-checkbox
             :data="permissionData"
+            node-key="id"
+            :default-expanded-keys="[2]"
+            :default-checked-keys="defaultKeys"
           />
         </el-form-item>
       </el-form>
@@ -47,6 +51,8 @@ onMounted(() => {
 
 const dialogVisible = ref(false)
 const permissionData = ref([])
+const defaultKeys = [4, 5];
+const treeRef = ref();
 
 const formData = reactive({
   name: '',
