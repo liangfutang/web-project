@@ -25,7 +25,7 @@
         <el-form-item prop="name" label="名称">
           <el-input v-model="formData.name"></el-input>
         </el-form-item>
-        <el-form-item prop="name" label="权限">
+        <el-form-item label="权限">
           <el-tree
             ref="treeRef"
             style="max-width: 600px"
