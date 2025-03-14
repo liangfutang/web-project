@@ -1,5 +1,7 @@
 <template>
   <div>
+    <panel-head :route="route" />
+
     <el-button @click="open(null)" type="primary" size="small">新增</el-button>
     
     <el-table :data="tableData.list" height="250" style="width: 100%">
@@ -50,6 +52,8 @@
 <script setup>
 import { ref, reactive, onMounted, nextTick } from 'vue'
 import { userGetMenu, userSetMenu, menuList } from '../../../api/index'
+import PanelHead from '../../../components/panelHead.vue'
+import { useRoute } from 'vue-router'
 
 onMounted(() => {
   // 获取列表数据
@@ -66,6 +70,7 @@ const permissionData = ref([])
 const defaultCheckKeys = [4, 5];
 const treeRef = ref();
 const formRef = ref();
+const route = useRoute();
 const tableData = reactive({
   list: [],
   total: 0
@@ -74,7 +79,6 @@ const paginationData = reactive({
   pageNum:1,
   pageSize:10
 })
-
 const formData = reactive({
   id: '',
   name: '',
