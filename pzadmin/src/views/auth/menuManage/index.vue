@@ -1,7 +1,20 @@
 <template>
   <div>
-    <el-button @click="dialogVisible = true" type="primary" size="small">新增</el-button>
+    <el-button @click="open(null)" type="primary" size="small">新增</el-button>
     
+    <el-table :data="tableData.list" height="250" style="width: 100%">
+      <el-table-column prop="id" label="id" />
+      <el-table-column prop="name" label="昵称" />
+      <el-table-column prop="permissionName" label="菜单权限" width="500px"/>
+      <el-table-column>
+        <template #default="scope">
+          <el-button type="primary" @click="open(scope.row)">
+            编辑
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
     <el-dialog
       v-model="dialogVisible"
       title="添加权限"
@@ -35,10 +48,12 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
-import { userGetMenu, userSetMenu } from '../../../api/index'
+import { ref, reactive, onMounted, nextTick } from 'vue'
+import { userGetMenu, userSetMenu, menuList } from '../../../api/index'
 
 onMounted(() => {
+  // 获取列表数据
+  getListData();
   //菜单数据
   userGetMenu().then(({ data }) => {
     console.log(data);
@@ -51,6 +66,14 @@ const permissionData = ref([])
 const defaultCheckKeys = [4, 5];
 const treeRef = ref();
 const formRef = ref();
+const tableData = reactive({
+  list: [],
+  total: 0
+})
+const paginationData = reactive({
+  pageNum:1,
+  pageSize:10
+})
 
 const formData = reactive({
   id: '',
@@ -80,10 +103,31 @@ const submitForm = async (formEl) => {
       const permissions = JSON.stringify(treeRef.value.getCheckedKeys());
       userSetMenu({ name: formData.name, permissions, id: formData.id }).then(({ data }) => {
          beforeClose()
-        //  getListData()
+         getListData()
        });
     } else {
       return false;
+    }
+  });
+}
+
+//请求列表数据
+const getListData = () => {
+  menuList(paginationData).then(({ data }) => {
+      const {list,total} =data.data
+      tableData.list = list
+      tableData.total = total
+   });
+}
+
+// 打开对话框
+const open = (rowData = {}) => {
+  dialogVisible.value = true;
+  // 弹窗打开form生成是异步的，确保在DOM更新完成后执行回调，用于读取最新DOM状态或处理依赖DOM的逻辑
+  nextTick(() => {
+    if(rowData){
+      Object.assign(formData, {id:rowData.id,name:rowData.name})
+      treeRef.value.setCheckedKeys(rowData.permissions)
     }
   });
 }
