@@ -4,7 +4,7 @@
 
     <el-button @click="open(null)" type="primary" size="small">新增</el-button>
     
-    <el-table :data="tableData.list" height="250" style="width: 100%">
+    <el-table :data="tableData.list" style="width: 100%">
       <el-table-column prop="id" label="id" />
       <el-table-column prop="name" label="昵称" />
       <el-table-column prop="permissionName" label="菜单权限" width="500px"/>
