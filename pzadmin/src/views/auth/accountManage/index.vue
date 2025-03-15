@@ -44,6 +44,7 @@
 
     <el-dialog v-model="dialogVisible" title="编辑用户" width="500">
       <el-form
+        ref="formRef"
         :model="dialogForm"
         :rules="dialogFormRules"
         label-width="100px"
@@ -51,8 +52,8 @@
         <el-form-item prop="mobile" label="手机号">
           <el-input v-model="dialogForm.mobile" disabled/>
         </el-form-item>
-        <el-form-item label="昵称">
-          <el-input prop="name" v-model="dialogForm.name"/>
+        <el-form-item prop="name" label="昵称">
+          <el-input v-model="dialogForm.name"/>
         </el-form-item>
         <el-form-item prop="permissions_id" label="菜单权限">
           <el-select v-model="dialogForm.permissions_id" placeholder="请选择菜单权限" style="width: 240px">
@@ -60,6 +61,11 @@
           </el-select>
         </el-form-item>
       </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitForm(formRef)">确认</el-button>
+        </div>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -69,6 +75,7 @@ import { onMounted, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router'
 import { menuSelectList, authAdmin } from '../../../api/index'
 import { dayjs } from 'element-plus'
+import { updateUser } from '../../../api/index'
 
 onMounted(() => {
   accountListData()
@@ -81,6 +88,7 @@ onMounted(() => {
 const route = useRoute();
 const menuListOptions = ref([]);
 const dialogVisible = ref(false);
+const formRef = ref();
 const tableData = reactive({
   list: [], 
   total: 0
@@ -125,6 +133,25 @@ const handleSizeChange = (val) => {
 const handleCurrentChange = (val) => {
   paginationData.pageNum = val
   accountListData()
+}
+const submitForm = async (formEl) => {
+  console.log('提交');
+  if (!formEl) return;
+  console.log('提交');
+  await formEl.validate((valid, fields) => {
+    console.log(valid);
+    if (valid) {
+      const { name, permissions_id } = dialogForm;
+      updateUser({ name, permissions_id }).then(({ data }) => {
+        if (data.code === 10000) {
+          dialogVisible.value = false;
+          accountListData()
+        } 
+       });
+    } else {
+      console.log("error submit!!", fields);
+    }
+  });
 }
 </script>
 
