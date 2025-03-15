@@ -21,7 +21,7 @@
       <el-pagination
         v-model:current-page="paginationData.pageNum"
         :page-size="paginationData.pageSize"
-        :size="small"
+        size="small"
         :background="false"
         layout="total, prev, pager, next"
         :total="tableData.total"

@@ -30,6 +30,17 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="pagination-info">
+      <el-pagination
+        size="small"
+        :background="false"
+        layout="total, prev, pager, next"
+        :total="tableData.total"
+        :page-size="paginationData.pageSize"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
 
     <el-dialog v-model="dialogVisible" title="编辑用户" width="500">
       <el-form
@@ -106,6 +117,14 @@ const permissionNameById = id => {
 const open = (rowData) => {
   dialogVisible.value = true;
   Object.assign(dialogForm, {name:rowData.name,permissions_id:rowData.permissions_id,mobile:rowData.mobile})
+}
+const handleSizeChange = (val) => {
+  paginationData.pageSize = val
+  accountListData()
+}
+const handleCurrentChange = (val) => {
+  paginationData.pageNum = val
+  accountListData()
 }
 </script>
 
