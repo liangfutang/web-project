@@ -26,11 +26,30 @@
       </el-table-column>
       <el-table-column label="操作">
         <template #default="scope">
-          <el-button type="primary">编辑</el-button>
+          <el-button type="primary" @click="open(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
 
+    <el-dialog v-model="dialogVisible" title="编辑用户" width="500">
+      <el-form
+        :model="dialogForm"
+        :rules="dialogFormRules"
+        label-width="100px"
+        label-position="left">
+        <el-form-item prop="mobile" label="手机号">
+          <el-input v-model="dialogForm.mobile" disabled/>
+        </el-form-item>
+        <el-form-item label="昵称">
+          <el-input prop="name" v-model="dialogForm.name"/>
+        </el-form-item>
+        <el-form-item prop="permissions_id" label="菜单权限">
+          <el-select v-model="dialogForm.permissions_id" placeholder="请选择菜单权限" style="width: 240px">
+            <el-option v-for="item in menuListOptions" :key="item.id" :label="item.name" :value="item.id"/>
+          </el-select>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -50,6 +69,7 @@ onMounted(() => {
 
 const route = useRoute();
 const menuListOptions = ref([]);
+const dialogVisible = ref(false);
 const tableData = reactive({
   list: [], 
   total: 0
@@ -57,6 +77,15 @@ const tableData = reactive({
 const paginationData = reactive({
   pageNum: 1,
   pageSize: 10,
+});
+const dialogForm = reactive({
+  name: "",
+  permissions_id: "",
+  mobile: ""
+});
+const dialogFormRules = reactive({
+  name: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
+  permissions_id: [{ required: true, message: '请选择权限', trigger: 'change' }],
 });
 
 const accountListData = () => {
@@ -73,6 +102,10 @@ const accountListData = () => {
 const permissionNameById = id => {
   const permission = menuListOptions.value.find(item => item.id === id)
   return permission ? permission.name : ''
+}
+const open = (rowData) => {
+  dialogVisible.value = true;
+  Object.assign(dialogForm, {name:rowData.name,permissions_id:rowData.permissions_id,mobile:rowData.mobile})
 }
 </script>
 
