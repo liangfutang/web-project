@@ -17,6 +17,19 @@
       </el-table-column>
     </el-table>
 
+    <div class="pagination-info">
+      <el-pagination
+        v-model:current-page="paginationData.pageNum"
+        :page-size="paginationData.pageSize"
+        :size="small"
+        :background="false"
+        layout="total, prev, pager, next"
+        :total="tableData.total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
+
     <el-dialog
       v-model="dialogVisible"
       title="添加权限"
@@ -134,6 +147,16 @@ const open = (rowData = {}) => {
       treeRef.value.setCheckedKeys(rowData.permissions)
     }
   });
+}
+
+// 分页
+const handleSizeChange = (val) => {
+  paginationData.pageSize = val;
+  getListData();
+}
+const handleCurrentChange = (val) => {
+  paginationData.pageNum = val;
+  getListData();
 }
 </script>
 
