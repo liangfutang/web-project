@@ -73,8 +73,8 @@ const handleCommand = (command) => {
   if (command === 'logout') {
     localStorage.removeItem('pz_token')
     localStorage.removeItem('pz_userInfo')
-    // window.location.href = window.location.origin
-    router.push('/login')
+    window.location.href = window.location.origin
+    // router.push('/login')
   }
 }
 </script>
