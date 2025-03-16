@@ -13,20 +13,16 @@
     </div>
     
     <div class="header-right">
-      <el-dropdown>
+      <el-dropdown @command="handleCommand">
         <div class="el-dropdown-link flex-box">
           <el-avatar
             :src="userAvatar"
           />
-          <p class="user-name">admin</p>
+          <p class="user-name">{{ userName }}</p>
         </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item>Action 1</el-dropdown-item>
-            <el-dropdown-item>Action 2</el-dropdown-item>
-            <el-dropdown-item>Action 3</el-dropdown-item>
-            <el-dropdown-item disabled>Action 4</el-dropdown-item>
-            <el-dropdown-item divided>Action 5</el-dropdown-item>
+            <el-dropdown-item command="logout">退出</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -44,7 +40,9 @@ const isCollapse = computed(() =>  store.state.menu.isCollapse)
 const selectMenu = computed(() => store.state.menu.selectMenu)
 const route = useRoute()
 const router = useRouter()
-const userAvatar = JSON.parse(localStorage.getItem('pz_userInfo')).avatar
+const userInfo = JSON.parse(localStorage.getItem('pz_userInfo'))
+const userAvatar = userInfo.avatar
+const userName = userInfo['name']
 
 const closeTag = (item, index) => {
   // 先删除store中的该标签
@@ -68,6 +66,16 @@ const closeTag = (item, index) => {
     router.push(selectMenuData[index].path)
   }
   
+}
+const handleCommand = (command) => {
+  console.log(command);
+  
+  if (command === 'logout') {
+    localStorage.removeItem('pz_token')
+    localStorage.removeItem('pz_userInfo')
+    // window.location.href = window.location.origin
+    router.push('/login')
+  }
 }
 </script>
 
