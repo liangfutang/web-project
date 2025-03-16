@@ -39,12 +39,15 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed, toRaw } from 'vue'
 import { UserFilled, Lock } from '@element-plus/icons-vue'
-import { getCode, login, userAuthentication } from "../../api/index"
+import { getCode, login, userAuthentication, menuPermissions } from "../../api/index"
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 const router = useRouter()
+const store = useStore()
+const routerList = computed(() => store.state.menu.routerList)
 const imgUrl = new URL('../../../public/login-head.png', import.meta.url)
 // 切换表单，0:登录 1:注册
 const formType = ref(0)
@@ -148,11 +151,19 @@ const submitForm = async (formEl) => {
         login(formData).then(({data})=>{
             if(data.code===10000){
               ElMessage.success('登录成功')
-              console.log(data,'data')
               //将token和用户信息缓存到浏览器
               localStorage.setItem('pz_token',data.data.token)
               localStorage.setItem('pz_userInfo',JSON.stringify(data.data.userInfo))
-              router.push('/')
+              menuPermissions().then(({data})=>{
+              if(data.code===10000){
+                  store.commit('dynamicMenu', data.data)
+                  // 动态添加路由
+                  toRaw(routerList.value).forEach(route => {
+                    router.addRoute('main', route);
+                  });                  
+                  router.push('/')
+                }
+              })
             }
           })
       }

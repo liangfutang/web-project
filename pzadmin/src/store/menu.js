@@ -1,7 +1,8 @@
 
 const state = () =>({
     isCollapse: false,
-    selectMenu: []
+    selectMenu: [],
+    routerList: []
 })
 
 const mutations = {
@@ -20,6 +21,33 @@ const mutations = {
     closeTag(state, menu) {
         const index = state.selectMenu.findIndex(intem => intem.name === menu.name)
         state.selectMenu.splice(index, 1)
+    },
+    // 动态添加路由
+    dynamicMenu(state, payload) {
+        
+        //通过glob导入文件
+        const modules = import.meta.glob('../views/**/**/*.vue')
+        const routeMap = {
+            '/dashboard': '/dashboard',
+            '/auth/admin': '/auth/accountManage',
+            '/auth/group': '/auth/menuManage',
+            '/vppz/staff': '/vppz/staff',
+            '/vppz/order': '/vppz/order',
+        }
+        
+        function setRoute(routeList) {
+            routeList.forEach(route => {
+                if (!route.children) {
+                    const url = `../views${routeMap[route.meta.path]}/index.vue`
+                    route.component = modules[url]                    
+                } else {
+                    setRoute(route.children)
+                }
+                
+            });
+        }
+        setRoute(payload)
+        state.routerList = payload
     }
 }
 
