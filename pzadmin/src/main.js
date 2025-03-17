@@ -6,8 +6,9 @@ import store from './store'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 // 刷新后的动态路由添加
-if (localStorage.getItem('pz_token')) {
-    store.commit('dynamicMenu', store.state.menu.routerList)
+const localData = localStorage.getItem('pz_v3pz')
+if (localData) {
+    store.commit('dynamicMenu', JSON.parse(localData).menu.routerList)
     store.state.menu.routerList.forEach(route => {
       router.addRoute('main', route);
     });
