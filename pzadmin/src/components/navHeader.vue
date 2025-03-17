@@ -6,7 +6,7 @@
       <ul class="flex-box">
         <li v-for="(item, index) in selectMenu" :key="item.path" class="tab flex-box" :class="{selected: item.path === route.path}">
           <el-icon size="12"><component :is="item.icon" /></el-icon>
-          <router-link :to="item.path" class="text flex-box">{{item.name}}</router-link>
+          <router-link :to="item.path" class="text flex-box" @click.native="handleLinkClick(item)">{{item.name}}</router-link>
           <el-icon size="12" class="close" @click="closeTag(item, index)"><Close /></el-icon>
         </li>
       </ul>
@@ -77,6 +77,10 @@ const handleCommand = (command) => {
     window.location.href = window.location.origin
     // router.push('/login')
   }
+}
+const handleLinkClick = (route) => {
+  console.log(route);
+  store.commit('updateMenuActive', route.menuIndex)
 }
 </script>
 
