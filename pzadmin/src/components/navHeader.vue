@@ -60,6 +60,7 @@ const closeTag = (item, index) => {
     if (!selectMenuData.length) {
       router.push('/')
     } else {
+      store.state.menu.menuActive = selectMenuData[index - 1].menuIndex
       router.push(selectMenuData[index - 1].path)
     }
   } else {
