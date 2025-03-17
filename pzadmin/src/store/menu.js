@@ -1,5 +1,5 @@
-
-const state = () =>({
+const localData = localStorage.getItem('pz_v3pz')
+const state = localData ? localData.menu : () =>({
     isCollapse: false,
     selectMenu: [],
     routerList: []
