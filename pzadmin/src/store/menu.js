@@ -1,8 +1,9 @@
-const localData = localStorage.getItem('pz_v3pz')
-const state = localData ? localData.menu : () =>({
+// const localData = localStorage.getItem('pz_v3pz')
+const state = () =>({
     isCollapse: false,
     selectMenu: [],
-    routerList: []
+    routerList: [],
+    menuActive:'1-1'
 })
 
 const mutations = {
@@ -48,6 +49,10 @@ const mutations = {
         }
         setRoute(payload)
         state.routerList = payload
+    },
+    // 修改选中菜单
+    updateMenuActive(state, payload) {
+        state.menuActive = payload
     }
 }
 

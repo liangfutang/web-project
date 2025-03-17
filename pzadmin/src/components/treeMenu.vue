@@ -34,6 +34,8 @@ const handleClick = (item, active) => {
     router.push(item.meta.path)
     // 将选中菜单放入到栈中
     store.commit('addMenu', item.meta)
+    // 更新当前选中菜单
+    store.commit('updateMenuActive', active)
 }
 </script>
 

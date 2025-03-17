@@ -4,7 +4,7 @@
         active-text-color="#ffd04b"
         background-color="#545c64"
         class="aside-container"
-        default-active="2"
+        :default-active="activeMenu"
         text-color="#fff"
         @open="handleOpen"
         @close="handleClose"
@@ -27,7 +27,7 @@ const store = useStore()
 const menuData = store.state.menu.routerList
 
 const isCollapse = computed(() =>  store.state.menu.isCollapse)
-
+const activeMenu = computed(() => store.state.menu.menuActive)
 
 
 const handleOpen = () => {}
