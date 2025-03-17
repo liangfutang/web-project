@@ -11,6 +11,23 @@ const routes = [
         path:'/', 
         component: Main,
         name: 'main',
+        redirect: to => {
+            const localData = localStorage.getItem('pz_v3pz')
+            if(localData){
+                const routerList = JSON.parse(localData).menu.routerList;
+                if(!routerList || routerList.length === 0){
+                    return '/login'
+                }
+                const firstRoute = routerList[0];
+                if (firstRoute.children && firstRoute.children.length > 0) {
+                    return firstRoute.children[0].meta.path;
+                } else {
+                    return firstRoute.meta.path;
+                }
+            }else{
+                return '/login'
+            }
+        },
         children: [
             // {
             //     path:'/dashboard', 
