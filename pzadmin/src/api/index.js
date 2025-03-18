@@ -43,4 +43,30 @@ export const updateUser = (data) =>{
 export const menuPermissions = () =>{
     return request.get('/menu/permissions')
 }
+//陪护师头像列表
+export const photoList = () =>{
+    return request.get('/photo/list')
+}
+
+//陪护师创建
+export const companion = (data) =>{
+    return request.post('/companion',data)
+}
+//陪护师列表
+export const companionList = (params) =>{
+    return request.get('/companion/list',{params})
+}
+//陪护师删除
+export const deleteCompanion = (data) =>{
+    return request.post('/delete/companion',data)
+}
+
+//订单列表
+export const adminOrder = (params) =>{
+    return request.get('/admin/order',{params})
+}
+//服务状态完成
+export const updateOrder = (data) =>{
+    return request.post('/update/order',data)
+}
 
