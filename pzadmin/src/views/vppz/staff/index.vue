@@ -64,6 +64,10 @@
         @current-change="handleCurrentChange"
       />
     </div>
+
+    <el-dialog v-model="dialogVisible" title="编辑用户" width="500">
+      
+    </el-dialog>
   </div>
 </template>
 

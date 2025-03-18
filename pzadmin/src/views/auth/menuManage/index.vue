@@ -32,7 +32,7 @@
 
     <el-dialog
       v-model="dialogVisible"
-      title="添加权限"
+      :title="dialogTitle"
       width="500"
       :before-close="beforeClose"
     >
@@ -73,7 +73,6 @@ onMounted(() => {
   getListData();
   //菜单数据
   userGetMenu().then(({ data }) => {
-    console.log(data);
     permissionData.value = data.data;
   });
 });
@@ -84,6 +83,7 @@ const defaultCheckKeys = [4, 5];
 const treeRef = ref();
 const formRef = ref();
 const route = useRoute();
+const dialogTitle = ref('')
 const tableData = reactive({
   list: [],
   total: 0
@@ -143,8 +143,11 @@ const open = (rowData = {}) => {
   // 弹窗打开form生成是异步的，确保在DOM更新完成后执行回调，用于读取最新DOM状态或处理依赖DOM的逻辑
   nextTick(() => {
     if(rowData){
+      dialogTitle.value = "编辑权限"
       Object.assign(formData, {id:rowData.id,name:rowData.name})
       treeRef.value.setCheckedKeys(rowData.permissions)
+    } else {
+      dialogTitle.value = "添加权限"
     }
   });
 }
