@@ -20,6 +20,7 @@
     </button>
 
     <el-table :data="tableData.list" style="width: 100%">
+      <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="id" />
       <el-table-column prop="name" label="昵称" />
       <el-table-column prop="avatar" label="头像" >
@@ -38,7 +39,14 @@
           <el-tag :type="scope.row.active ? 'success' : 'danger'">{{ scope.row.active ? '生效' : '失效' }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="create_time" label="创建时间" />
+      <el-table-column prop="create_time" label="创建时间" >
+        <template #default="scope">
+          <div class="flex-box">
+            <el-icon style="margin-right: 10px"><Clock /></el-icon>
+            {{ scope.row.create_time }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template #default="scope">
           <el-button type="primary" @click="open(scope.row)">编辑</el-button>
@@ -115,6 +123,11 @@ const handleCurrentChange = (val) => {
 .btns {
   padding: 10px 0 10px 10px;
   border: 0px;
+}
+.flex-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .image-list {
   display: flex;
