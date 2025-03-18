@@ -58,9 +58,22 @@ const closeTag = (item, index) => {
   // 最后一页  非最后一页
   if (selectMenuData.length === index) {
     if (!selectMenuData.length) {
+      // 删除的是最后一页，需要将有权限的第一个左侧边栏高亮
+      const localData = localStorage.getItem('pz_v3pz')
+      if (localData) {
+        const routerList = JSON.parse(localData).menu.routerList;
+        if (routerList && routerList.length > 0) {
+          const firstRoute = routerList[0];
+          if (firstRoute.children && firstRoute.children.length > 0) {
+            store.commit('updateMenuActive', firstRoute.children[0].meta.menuIndex)
+          } else {
+            store.commit('updateMenuActive', firstRoute.meta.menuIndex)
+          }
+        }
+      }
       router.push('/')
     } else {
-      store.state.menu.menuActive = selectMenuData[index - 1].menuIndex
+      store.commit('updateMenuActive', selectMenuData[index - 1].menuIndex)
       router.push(selectMenuData[index - 1].path)
     }
   } else {
