@@ -45,6 +45,17 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="pagination-info">
+      <el-pagination
+        size="small"
+        :background="false"
+        layout="total, prev, pager, next"
+        :total="tableData.total"
+        :page-size="paginationData.pageSize"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
   </div>
 </template>
 
@@ -57,14 +68,7 @@ import { dayjs } from 'element-plus'
 import { companionList } from '../../../api/index.js'
 
 onMounted(() => {
-  companionList(paginationData).then(({ data }) => {
-    const { list, total } = data.data
-    list.forEach(item => {
-      item.create_time = dayjs(item.create_time).format('YYYY-MM-DD')
-    });
-    tableData.list = list
-    tableData.total = total
-  })
+  companionTableList()
 })
 
 const route = useRoute()
@@ -86,6 +90,24 @@ const cancelEvent = () => {
 }
 const open = (rowData) => {
   console.log(rowData)
+}
+const companionTableList = () => {
+  companionList(paginationData).then(({ data }) => {
+    const { list, total } = data.data
+    list.forEach(item => {
+      item.create_time = dayjs(item.create_time).format('YYYY-MM-DD')
+    });
+    tableData.list = list
+    tableData.total = total
+  })
+}
+const handleSizeChange = (val) => {
+  paginationData.pageSize = val
+  companionTableList()
+}
+const handleCurrentChange = (val) => {
+  paginationData.pageNum = val
+  companionTableList()
 }
 </script>
 
