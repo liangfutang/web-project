@@ -19,7 +19,7 @@
       </el-popconfirm>
     </button>
 
-    <el-table :data="tableData.list" style="width: 100%">
+    <el-table :data="tableData.list" style="width: 100%"  @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="id" />
       <el-table-column prop="name" label="昵称" />
@@ -36,7 +36,7 @@
       <el-table-column prop="mobile" label="手机号" />
       <el-table-column prop="active" label="状态">
         <template #default="scope">
-          <el-tag :type="scope.row.active ? 'success' : 'danger'">{{ scope.row.active ? '生效' : '失效' }}</el-tag>
+          <el-tag :type="scope.row.active ? 'success' : 'danger'">{{ scope.row.active ? "正常" : "失效" }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="create_time" label="创建时间" >
@@ -71,7 +71,7 @@
 import PanelHead from '../../../components/panelHead.vue'
 import { useRoute } from 'vue-router'
 import { Plus, Delete, InfoFilled } from '@element-plus/icons-vue'
-import { reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { dayjs } from 'element-plus'
 import { companionList } from '../../../api/index.js'
 
@@ -80,6 +80,8 @@ onMounted(() => {
 })
 
 const route = useRoute()
+// 表单中选中的
+const selectTableData = ref([])
 const tableData = reactive({
   list: [],
   total: 0
@@ -116,6 +118,9 @@ const handleSizeChange = (val) => {
 const handleCurrentChange = (val) => {
   paginationData.pageNum = val
   companionTableList()
+}
+const handleSelectionChange = (val) => {
+  selectTableData.value = val.map(item => ({ id:item.id }))
 }
 </script>
 
