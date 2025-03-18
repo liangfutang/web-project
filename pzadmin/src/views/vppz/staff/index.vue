@@ -3,7 +3,7 @@
     <panel-head :route="route" />
 
     <button class="btns">
-      <el-button type="primary" :icon="Plus" size="small">新增</el-button>
+      <el-button type="primary" :icon="Plus" size="small" @click="open(null)">新增</el-button>
       <el-popconfirm
         confirm-button-text="是"
         cancel-button-text="否"
@@ -65,8 +65,34 @@
       />
     </div>
 
-    <el-dialog v-model="dialogVisible" title="编辑用户" width="500">
-      
+    <el-dialog v-model="dialogVisible" :title="dialogTitle" width="500" :beforeClose="beforeDialogClose">
+      <el-form :model="dialogFormData" :rules="dialogFormRules" ref="dialogFormRef" label-width="100px" label-position="left">
+        <el-form-item label="昵称" prop="name">
+          <el-input v-model="dialogFormData.name" />
+        </el-form-item>
+        <el-form-item label="头像" prop="avatar">
+          <el-button v-if="!dialogFormData.avatar" type="primary">上传</el-button>
+          <el-image v-else style="width: 100px;height: 100px;" :src="dialogFormData.avatar" />
+        </el-form-item>
+        <el-form-item label="性别" prop="sex">
+          <el-select v-model="dialogFormData.sex" placeholder="请选择性别">
+            <el-option label="男" value="1"></el-option>
+            <el-option label="女" value="2"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="年龄" prop="age">
+          <el-input-number v-model="dialogFormData.age" />
+        </el-form-item>
+        <el-form-item label="手机号" prop="mobile">
+          <el-input v-model="dialogFormData.mobile" />
+        </el-form-item>
+        <el-form-item label="是否生效" prop="active">
+          <el-radio-group v-model="dialogFormData.active">
+            <el-radio :value="0">失效</el-radio>
+            <el-radio :value="1">生效</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
     </el-dialog>
   </div>
 </template>
@@ -75,7 +101,7 @@
 import PanelHead from '../../../components/panelHead.vue'
 import { useRoute } from 'vue-router'
 import { Plus, Delete, InfoFilled } from '@element-plus/icons-vue'
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, nextTick } from 'vue'
 import { dayjs } from 'element-plus'
 import { companionList } from '../../../api/index.js'
 
@@ -86,6 +112,9 @@ onMounted(() => {
 const route = useRoute()
 // 表单中选中的
 const selectTableData = ref([])
+const dialogVisible = ref(false)
+const dialogTitle = ref('')
+const dialogFormRef = ref()
 const tableData = reactive({
   list: [],
   total: 0
@@ -95,6 +124,28 @@ const paginationData = reactive({
     pageNum:1,
     pageSize:10
 })
+const dialogFormData = reactive({
+  id: "",
+  name: '',
+  avatar: '',
+  sex: '',
+  age: 28,
+  mobile: '',
+  active: '',
+})
+const dialogFormRules = reactive({
+  name: [
+    { required: true, message: '请输入昵称', trigger: 'blur' },
+    { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
+  ],
+  avatar: [
+    { required: true, message: '请输入头像', trigger: 'blur' },
+  ]
+})
+const beforeDialogClose = () => {
+  dialogVisible.value = false
+  dialogFormRef.value.resetFields()
+}
 
 const confirmEvent = () => {
   console.log('confirm')
@@ -102,8 +153,16 @@ const confirmEvent = () => {
 const cancelEvent = () => {
   console.log('cancel')
 }
-const open = (rowData) => {
-  console.log(rowData)
+const open = (rowData = {}) => {
+  dialogVisible.value = true
+  nextTick(() => {
+    if(rowData){
+      dialogTitle.value = "编辑陪护师"
+      Object.assign(dialogFormData, rowData)
+    } else {
+      dialogTitle.value = "添加陪护师"
+    }
+  })
 }
 const companionTableList = () => {
   companionList(paginationData).then(({ data }) => {
