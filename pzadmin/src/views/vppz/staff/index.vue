@@ -132,7 +132,7 @@ import { useRoute } from 'vue-router'
 import { Plus, Delete, InfoFilled } from '@element-plus/icons-vue'
 import { ref, reactive, onMounted, nextTick } from 'vue'
 import { dayjs } from 'element-plus'
-import { companionList, companion, photoList } from '../../../api/index.js'
+import { companionList, companion, photoList, deleteCompanion } from '../../../api/index.js'
 
 onMounted(() => {
   companionTableList()
@@ -220,7 +220,15 @@ const beforeDialogClose = () => {
 }
 
 const confirmEvent = () => {
-  console.log('confirm')
+  if(!selectTableData.value.length){
+    return ElMessage.warning('请选择至少一项数据')
+  }
+  deleteCompanion({id:selectTableData.value}).then(({data})=>{
+    if(data.code === 10000){ //数据请求成功
+      ElMessage.success('删除成功')
+      companionTableList()
+    }
+  })
 }
 const cancelEvent = () => {
   console.log('cancel')
