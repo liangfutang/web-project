@@ -30,15 +30,29 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { reactive, getCurrentInstance } from 'vue';
+import { useRouter } from 'vue-router';
 
-const onSubmit = () =>{
-    console.log('submit');
-}
+const { proxy: { $api } } = getCurrentInstance();
+const router = useRouter();
+
 const loginForm = reactive({
     userName: '',
     passWord: ''
 })
+
+const onSubmit = async () =>{
+    console.log('submit');
+    const { data } = await $api.login(loginForm);
+    if (data.code === 10000) {
+        localStorage.setItem('h5_token', data.data.token)
+        localStorage.setItem('h5_userInfo', JSON.stringify(data.data.userInfo))
+        router.push('/home')
+    } else {
+        alert("用户名或密码错误!")
+        router.push('/login')
+    }
+}
 </script>
 
 <style lang="less" scoped>
