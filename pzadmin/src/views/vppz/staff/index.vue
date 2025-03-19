@@ -71,7 +71,7 @@
           <el-input v-model="dialogFormData.name" />
         </el-form-item>
         <el-form-item label="头像" prop="avatar">
-          <el-button v-if="!dialogFormData.avatar" type="primary">上传</el-button>
+          <el-button v-if="!dialogFormData.avatar" type="primary" @click="dialogImgVisable = true">点击上传</el-button>
           <el-image v-else style="width: 100px;height: 100px;" :src="dialogFormData.avatar" />
         </el-form-item>
         <el-form-item label="性别" prop="sex">
@@ -99,6 +99,30 @@
         </div>
       </template>
     </el-dialog>
+
+    <el-dialog v-model="dialogImgVisable" title="选择图片" width="680" :beforeClose="beforeImgDialogClose">
+      <div class="image-list">
+        <!-- 拿到当前的数据以及数据的索引 -->
+        <div
+          v-for="(item, index) in imgFileList"
+          :key="item.name"
+          class="img-box"
+          @click="selectImgIndex = index"
+        >
+          <!-- 如果选中的图片，则添加勾选样式 -->
+          <div v-if="selectImgIndex === index" class="select">
+            <el-icon color="#fff"> <Check /> </el-icon>
+          </div>
+          <el-image style="width: 148px; height: 148px" :src="item.url" />
+        </div>
+      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="dialogImgVisable = false">取消</el-button>
+          <el-button type="primary" @click="confirmImage">确认</el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -108,16 +132,22 @@ import { useRoute } from 'vue-router'
 import { Plus, Delete, InfoFilled } from '@element-plus/icons-vue'
 import { ref, reactive, onMounted, nextTick } from 'vue'
 import { dayjs } from 'element-plus'
-import { companionList, companion } from '../../../api/index.js'
+import { companionList, companion, photoList } from '../../../api/index.js'
 
 onMounted(() => {
   companionTableList()
+  photoList().then(({ data }) => {
+    imgFileList.value = data.data;
+  });
 })
 
 const route = useRoute()
 // 表单中选中的
 const selectTableData = ref([])
 const dialogVisible = ref(false)
+const dialogImgVisable = ref(false)
+const imgFileList = ref([]);
+const selectImgIndex = ref(0)
 const dialogTitle = ref('')
 const dialogFormRef = ref()
 const tableData = reactive({
@@ -176,6 +206,13 @@ const confirm = async (formEl) => {
       return false;
     }
   });
+}
+const beforeImgDialogClose = () => {
+  dialogImgVisable.value = false
+}
+const confirmImage = () => {
+  dialogFormData.avatar = imgFileList.value[selectImgIndex.value].url
+  beforeImgDialogClose()
 }
 const beforeDialogClose = () => {
   dialogVisible.value = false
