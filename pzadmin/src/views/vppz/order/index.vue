@@ -3,7 +3,15 @@
     <panel-head :route="route" />
 
     <div class="searchForm">
-      
+      <!-- :inline="true" 同一行显示 -->
+      <el-form :inline="true" :model="searchForm">
+            <el-form-item prop="out_trade_no">
+                <el-input v-model="searchForm.out_trade_no" placeholder="订单号" />
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="onSubmit" >查询</el-button>
+            </el-form-item>
+        </el-form>
     </div>
     <el-table :data="tableData.list">
         <el-table-column prop="out_trade_no" label="订单号" width="150" fixed="left"></el-table-column>
@@ -91,7 +99,10 @@ const paginationData = reactive({
     pageNum:1,
     pageSize:10
 })
-
+//表单搜索
+const searchForm = reactive({
+    out_trade_no:''
+})
 
 const getListData = (params={} ) =>{ //定义列表数据
     adminOrder({...paginationData,...params}).then(({data})=>{ //三个点表示把两组参数合并，先调用aip在把分页数据传递进去,在.then里面拿到当前数据返回的内容
@@ -125,6 +136,9 @@ const confirmEvent =(id) =>{
             getListData()  //最后一章
         }
     })
+}
+const onSubmit = () =>{
+    getListData(searchForm)
 }
 </script>
 
