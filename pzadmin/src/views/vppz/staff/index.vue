@@ -93,6 +93,11 @@
           </el-radio-group>
         </el-form-item>
       </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="confirm(dialogFormRef)">确认</el-button>
+        </div>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -103,7 +108,7 @@ import { useRoute } from 'vue-router'
 import { Plus, Delete, InfoFilled } from '@element-plus/icons-vue'
 import { ref, reactive, onMounted, nextTick } from 'vue'
 import { dayjs } from 'element-plus'
-import { companionList } from '../../../api/index.js'
+import { companionList, companion } from '../../../api/index.js'
 
 onMounted(() => {
   companionTableList()
@@ -139,7 +144,7 @@ const dialogFormRules = reactive({
     { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
   ],
   avatar: [
-    { required: true, message: '请输入头像', trigger: 'blur' },
+    { required: true, message: '请上传头像', trigger: 'blur' },
   ],
   sex: [
     { required: true, message: '请选择性别', trigger: 'blur' },
@@ -152,6 +157,26 @@ const dialogFormRules = reactive({
     { required: true, message: '请选择是否生效', trigger: 'blur' },
   ]
 })
+
+const confirm = async (formEl) => {
+  if (!formEl) return;
+  formEl.validate((valid) => {
+    if (valid) {
+      companion(dialogFormData).then(({ data }) => {
+        if (data.code === 10000) {
+          ElMessage.success("添加成功");
+          beforeDialogClose();
+          companionTableList();
+        } else {
+          ElMessage.error(data.message);
+        }
+      });
+    } else {
+      console.log('error submit!!');
+      return false;
+    }
+  });
+}
 const beforeDialogClose = () => {
   dialogVisible.value = false
   dialogFormRef.value.resetFields()
