@@ -55,6 +55,18 @@
             </template>
         </el-table-column>
     </el-table>
+    <div class="pagination-info">
+        <el-pagination
+            v-model:current-page="paginationData.pageNum"
+            :page-size="paginationData.pageSize"
+            :background="false"
+            size="small"
+            layout="total, prev, pager, next"
+            :total="tableData.total"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+        />
+    </div>
   </div>
 </template>
 
