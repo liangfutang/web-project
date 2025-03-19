@@ -58,7 +58,19 @@ const routes = [
     },
 ]
 
-export default createRouter({
+ const router = createRouter({
     history: createWebHashHistory(),
     routes
 })
+
+router.beforeEach((to, from) => {
+    const token = localStorage.getItem('h5_token')
+    //非登录页面token不存在     ======    没有注册保存过的账号和密码进入了后台，跳回登录页面
+    if (!token && to.path !== '/login'){
+        return '/login'
+    } else if(token && to.path === '/login'){  //token存在，但是进入登录页面，跳回后台首页
+        return '/'
+    }
+})
+
+export default router
