@@ -140,6 +140,16 @@ const dialogFormRules = reactive({
   ],
   avatar: [
     { required: true, message: '请输入头像', trigger: 'blur' },
+  ],
+  sex: [
+    { required: true, message: '请选择性别', trigger: 'blur' },
+  ],
+  mobile: [
+    { required: true, message: '请输入手机号', trigger: 'blur' },
+    { pattern: /^1[3456789]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur' }
+  ],
+  active: [
+    { required: true, message: '请选择是否生效', trigger: 'blur' },
   ]
 })
 const beforeDialogClose = () => {
