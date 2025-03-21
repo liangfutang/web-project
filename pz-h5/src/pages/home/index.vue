@@ -13,11 +13,18 @@
             <van-image :src="item.pic_image_url" radius="5"/>
         </van-swipe-item>
       </van-swipe>
+      <!-- 快捷入口 -->
+      <van-row justify="space-around">
+        <van-col v-for="(item, index) in homeData.nav2s" :key="item.id" span="11" @click="goOrderTwo(index)">
+            <van-image :src="item.pic_image_url"/>
+        </van-col>
+      </van-row>
   </div>
 </template>
 
 <script setup>
 import { ref, reactive, getCurrentInstance, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 onMounted(async ()=>{
     const { data } = await $api.index()
@@ -26,6 +33,7 @@ onMounted(async ()=>{
 })
 
 const searchValue = ref('');
+const router = useRouter();
 const { proxy: { $api } } = getCurrentInstance();
 const homeData = reactive({
     hospitals: [],
@@ -34,6 +42,11 @@ const homeData = reactive({
     now: '',
     slides: [],
 })
+
+const goOrderTwo = (index) => {
+    console.log(index)
+    router.push(`/createOrder?id=${homeData.hospitals[index].id}`)
+}
 </script>
 
 <style lang="less" scoped>
