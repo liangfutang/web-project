@@ -1,18 +1,39 @@
 <template>
-  <div class="header">
-    <div class="header-left">
-        中部地区
-        <van-icon name="arrow" />
-    </div>
-    <van-search v-model="searchValue" shape="round" placeholder="请输入关键字"/>
+  <div>
+      <div class="header">
+        <div class="header-left">
+            中部地区
+            <van-icon name="arrow" />
+        </div>
+        <van-search v-model="searchValue" shape="round" placeholder="请输入关键字"/>
+      </div>
+      <!-- 轮播图 -->
+      <van-swipe class="my-swiper" :autoplay="3000" indicator-color="white" height="170">
+        <van-swipe-item v-for="item in homeData.slides" :key="item.id">
+            <van-image :src="item.pic_image_url" radius="5"/>
+        </van-swipe-item>
+      </van-swipe>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive, getCurrentInstance, onMounted } from 'vue';
+
+onMounted(async ()=>{
+    const { data } = await $api.index()
+    Object.assign(homeData, data.data)
+    console.log(homeData)
+})
 
 const searchValue = ref('');
-
+const { proxy: { $api } } = getCurrentInstance();
+const homeData = reactive({
+    hospitals: [],
+    nav2s: [],
+    navs: [],
+    now: '',
+    slides: [],
+})
 </script>
 
 <style lang="less" scoped>
