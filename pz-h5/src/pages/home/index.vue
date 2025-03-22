@@ -20,7 +20,7 @@
         </van-col>
       </van-row>
       <!-- 医院列表显示 -->
-      <van-row justify="space-around" class="yy-list" v-for="item in homeData.hospitals" :key="item.id">
+      <van-row justify="space-around" class="yy-list" v-for="item in homeData.hospitals" :key="item.id" @click="goOrder(item)">
         <van-col span="6">
             <van-image :src="item.avatar_url" width="100" height="90"/>
         </van-col>
@@ -62,6 +62,10 @@ const homeData = reactive({
 const goOrderTwo = (index) => {
     console.log(index)
     router.push(`/createOrder?id=${homeData.hospitals[index].id}`)
+}
+//点击医院列表
+const goOrder = (data) => {
+    router.push(`/createOrder?id=${data.id}`)
 }
 </script>
 
