@@ -19,6 +19,22 @@
             <van-image :src="item.pic_image_url"/>
         </van-col>
       </van-row>
+      <!-- 医院列表显示 -->
+      <van-row justify="space-around" class="yy-list" v-for="item in homeData.hospitals" :key="item.id">
+        <van-col span="6">
+            <van-image :src="item.avatar_url" width="100" height="90"/>
+        </van-col>
+        <van-col class="yy" span="15">
+            <div class="yy-name">{{ item.name }}</div>
+            <div class="yy-type">
+                <span>{{ item.rank }}</span>
+                <!-- &nbsp是空格符的转义符 -->
+                &nbsp;
+                <span>{{ item.label }}</span>
+                <div class="yy-text">{{ item.intro }}</div>
+            </div>
+        </van-col>
+      </van-row>
   </div>
 </template>
 
