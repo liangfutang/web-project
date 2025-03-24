@@ -17,8 +17,8 @@
         </template>
     </van-cell>
 
-    <!-- 就诊医院 -->
     <van-cell-group class="cell">
+        <!-- 就诊医院 -->
         <van-cell>
             <template #title>就诊医院</template>
             <template #default>
@@ -28,12 +28,27 @@
                     </div>
                 </template>
         </van-cell>
+        <!-- 就诊时间 -->
+         <van-cell>
+            <template #title>就诊时间</template>
+            <template #default>
+                <div @click="showStartTime = true">
+                    {{ currentDate || "请选择就诊时间" }}
+                    <van-icon name="arrow" />
+                </div>
+            </template>
+         </van-cell>
     </van-cell-group>
 
 
     <!-- 就诊医院弹窗层 -->
     <van-popup v-model:show="showHospital" position="bottom" :style="{ height: '30%' }">
         <van-picker :columns="showHospColumns" @confirm="showHospConfirm" @cancel="showHospital = false"/>
+    </van-popup>
+    <!-- 就诊时间弹窗层 -->
+    <van-popup v-model:show="showStartTime" position="bottom" :style="{ height: '30%' }">
+        <van-date-picker @confirm="showTimeConfirm" @cancel="showStartTime = false" title="选择日期"
+                :min-date="minDate" />
     </van-popup>
   </div>
 </template>
@@ -51,6 +66,9 @@ onMounted(async () => {
 
 const router = useRouter()
 const showHospital = ref(false)
+const showStartTime = ref(false)
+const minDate = ref(new Date())
+const currentDate = ref()
 const { proxy:{$api} } = getCurrentInstance()
 //form数据
 const form = reactive({})
@@ -64,6 +82,16 @@ const showHospColumns = computed(() => {
         return { text: item.name, value: item.id }
     })
 })
+const showTimeConfirm = (item) => {
+    //时间戳转日期
+    const dateStr = item.selectedValues.join('-')
+    //日期格式化
+    currentDate.value = dateStr
+    //时间戳格式转换
+    form.starttime = new Date(dateStr).getTime()
+    //关闭弹出层
+    showStartTime.value = false
+}
 
 const goBack = () => {
   router.go(-1)
