@@ -4,11 +4,14 @@
         <van-icon @click="goBack" name="arrow-left" class="header-left" size="30"/>
         填写服务订单
     </div>
+
+    <status-bar :item='0'/>
   </div>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
+import StatusBar from '../../components/statusBar.vue'
 
 const router = useRouter()
 
