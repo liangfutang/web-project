@@ -1,14 +1,20 @@
 <template>
   <div class="container">
     <div class="header">
-        <van-icon name="arrow-left" class="header-left" size="30"/>
+        <van-icon @click="goBack" name="arrow-left" class="header-left" size="30"/>
         填写服务订单
     </div>
   </div>
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
+
+const goBack = () => {
+  router.go(-1)
+}
 </script>
 
 <style lang="less" scoped>
