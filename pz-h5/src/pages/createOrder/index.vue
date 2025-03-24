@@ -4,19 +4,76 @@
         <van-icon @click="goBack" name="arrow-left" class="header-left" size="30"/>
         填写服务订单
     </div>
-
+    <!-- 订单状态跟踪 -->
     <status-bar :item='0'/>
+
+    <van-cell class="cell">
+        <template #title>
+            <van-image width="25" height="25" :src="createInfo.service.serviceImg" />
+            <span class="service-name">{{ createInfo.service.serviceName }}</span>
+        </template>
+        <template #default>
+            <div class="service-text">服务内容</div>
+        </template>
+    </van-cell>
+
+    <!-- 就诊医院 -->
+    <van-cell-group class="cell">
+        <van-cell>
+            <template #title>就诊医院</template>
+            <template #default>
+                    <div @click="showHospital = true">
+                        {{ form.hospital_name || "请选择就诊医院" }}
+                        <van-icon name="arrow" />
+                    </div>
+                </template>
+        </van-cell>
+    </van-cell-group>
+
+
+    <!-- 就诊医院弹窗层 -->
+    <van-popup v-model:show="showHospital" position="bottom" :style="{ height: '30%' }">
+        <van-picker :columns="showHospColumns" @confirm="showHospConfirm" @cancel="showHospital = false"/>
+    </van-popup>
   </div>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
 import StatusBar from '../../components/statusBar.vue'
+import { getCurrentInstance, onMounted, reactive, ref, computed } from 'vue'
+
+onMounted(async () => {
+    const { data } = await $api.h5Companion()
+    Object.assign(createInfo, data.data)
+    console.log(createInfo);
+})
 
 const router = useRouter()
+const showHospital = ref(false)
+const { proxy:{$api} } = getCurrentInstance()
+//form数据
+const form = reactive({})
+const createInfo = reactive({
+    companions: [],
+    service: [],
+    hospitals: [],
+})
+const showHospColumns = computed(() => {
+    return createInfo.hospitals.map(item => {
+        return { text: item.name, value: item.id }
+    })
+})
 
 const goBack = () => {
   router.go(-1)
+}
+//选择医院
+const showHospConfirm = (item) => {
+    form.hospital_id = item.selectedOptions[0].value
+    form.hospital_name = item.selectedOptions[0].text
+    //关闭弹出层
+    showHospital.value = false
 }
 </script>
 
