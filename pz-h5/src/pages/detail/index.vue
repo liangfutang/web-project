@@ -1,17 +1,39 @@
 <template>
   <div class="container">
     <div class="header">
-            <van-icon @click="goBack" name="arrow-left" class="header-left" size="40" />
-            订单详情
-        </div>
+        <van-icon @click="goBack" name="arrow-left" class="header-left" size="40" />
+        订单详情
+    </div>
+    <status-bar :item="stateMap[detailData.trade_state]" />
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, getCurrentInstance } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import Qrcode from 'qrcode'
 
+onMounted(async () => {
+    const { data } = await $api.orderDetail({ oid: route.query.oid })
+    Object.assign(detailData, data.data)
+    Qrcode.toDataURL(data.data.code_url).then((url) => {
+        codeImg.value = url
+    })
+    console.log(detailData);
+})
+
+const { proxy:{$api} } = getCurrentInstance();
 const router = useRouter();
+const route = useRoute();
+const codeImg = ref('')
+const detailData = reactive({})
+const stateMap = {
+    '待支付': 10,
+    '待服务': 20,
+    '已完成': 30,
+    '已取消': 40,
+}
+
 const goBack = () => {
     router.go(-1)
 }
