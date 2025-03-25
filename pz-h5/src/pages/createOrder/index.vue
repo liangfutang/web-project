@@ -48,7 +48,27 @@
                 </div>
             </template>
           </van-cell>
+          <!-- 接送地址 -->
+          <van-cell>
+            <template #title>接送地址</template>
+            <template #default>
+                <van-field class="text" input-align="right" v-model="form.receiveAddress" placeholder="请输入接送地址" />
+            </template>
+          </van-cell>
+          <!-- 联系电话 -->
+          <van-cell>
+            <template #title>联系电话</template>
+            <template #default>
+                <van-field class="text" input-align="right" v-model="form.tel" placeholder="请输入联系电话" />
+            </template>
+          </van-cell>
     </van-cell-group>
+
+    <van-cell-group title="服务需求" class="cell">
+        <van-field class="text" style="height: 100px;" v-model="form.demand" placeholder="请简单描述您要就诊的科室" />
+    </van-cell-group>
+    <!-- 提交按钮 -->
+    <van-button @click="submit" class="sumbit" type="primary" size="large">提交订单</van-button>
 
 
     <!-- 就诊医院弹窗层 -->
@@ -128,6 +148,26 @@ const showComponionConfirm = (item) => {
     form.companion_id = item.selectedOptions[0].value
     companionName.value = item.selectedOptions[0].text
     showComponion.value = false
+}
+const submit = async () => {
+    const params = [
+        'hospital_id',
+        'hospital_name',
+        'demand',
+        'companion_id',
+        'receiveAddress',
+        'tel',
+        'starttime'
+    ]
+    //表单校验
+    for (const i of params) {
+        if (!form[i]) {
+            showNotify({ message: '请填写每一项完整信息' })
+            return
+        }
+    }
+    //创建订单,将用户在表单中输入的数据作为参数发送，等待后端处理，并获取处理结果。
+    const { data: orderRes } = await $api.createOrder(form)
 }
 </script>
 
