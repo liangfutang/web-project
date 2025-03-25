@@ -33,6 +33,16 @@
             <div class="text2">期待下次为您服务，如需帮助可咨询客服</div>
         </div>
     </div>
+    <!-- 订单详情信息上部分 -->
+    <van-cell-group class="card">
+        <div class="header-text">预约时间</div>
+        <van-cell v-for="(item, key) in makeInfo" :key="key" :title="item" :value="formatData(key)" />
+    </van-cell-group>
+    <!-- 订单详情信息下部分 -->
+    <van-cell-group class="card">
+        <div class="header-text">订单信息</div>
+        <van-cell v-for="(item, key) in orderInfo" :key="key" :title="item" :value="formatData(key)" />
+    </van-cell-group>
 
     <!-- 支付二维码弹窗 -->
     <van-dialog :show-confirm-button="false" v-model:show="showCode">
@@ -75,6 +85,24 @@ const stateMap = {
     '已完成': 30,
     '已取消': 40,
 }
+//订单详情信息上部分:预约时间
+const makeInfo = {
+    service_name: '预约时间',
+    hospital_name: '就诊医院',
+    starttime: '期望就诊时间',
+    'client.name': '就诊人',
+    'client.mobile': '就诊人电话',
+    receiveAddress: '接送地址',
+    demand: '其他需求'
+}
+
+//订单详情信息下部分:订单信息
+const orderInfo = {
+    tel: '就诊人电话',
+    order_start_time: '下单时间',
+    price: '应付金额',
+    out_trade_no: '订单编号',
+}
 
 const goBack = () => {
     router.go(-1)
@@ -82,6 +110,28 @@ const goBack = () => {
 const closeCode = () => {
     showCode.value = false
     router.push('/order')
+}
+//格式化数据
+const formatData = (key) => {
+    if (key.indexOf(".") === -1) {
+        if (key === "order_start_time") {
+            return formatTimestamp(detailData[key]);
+        }
+        return detailData[key];
+    }
+    let arr = key.split(".").reduce((o, p) => {
+        return (o || {})[p];
+    }, detailData);
+    return arr;
+}
+//格式化时间戳
+function formatTimestamp(timestamp) {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // 月份是从0开始的，所以需要+1
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
 }
 </script>
 
