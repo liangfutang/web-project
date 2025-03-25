@@ -26,6 +26,7 @@
             {{ item.trade_state }}
             <!-- 待支付订单的倒计时 -->
             <counter :second="item.timer" v-if="item.trade_state === '待支付'" />
+            <!-- <van-count-down :time="item.timer" :style="{ color: colorMap[item.trade_state] }" v-if="item.trade_state === '待支付'"/> -->
         </van-col>
     </van-row>
   </div>
