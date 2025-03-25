@@ -22,11 +22,11 @@
         <van-cell>
             <template #title>就诊医院</template>
             <template #default>
-                    <div @click="showHospital = true">
-                        {{ form.hospital_name || "请选择就诊医院" }}
-                        <van-icon name="arrow" />
-                    </div>
-                </template>
+                <div @click="showHospital = true">
+                    {{ form.hospital_name || "请选择就诊医院" }}
+                    <van-icon name="arrow" />
+                </div>
+            </template>
         </van-cell>
         <!-- 就诊时间 -->
          <van-cell>
@@ -38,6 +38,16 @@
                 </div>
             </template>
          </van-cell>
+         <!-- 陪诊师 -->
+          <van-cell>
+            <template #title>陪诊师</template>
+            <template #default>
+                <div @click="showComponion = true">
+                    {{ companionName || "请选择陪诊师" }}
+                    <van-icon name="arrow" />
+                </div>
+            </template>
+          </van-cell>
     </van-cell-group>
 
 
@@ -49,6 +59,10 @@
     <van-popup v-model:show="showStartTime" position="bottom" :style="{ height: '30%' }">
         <van-date-picker @confirm="showTimeConfirm" @cancel="showStartTime = false" title="选择日期"
                 :min-date="minDate" />
+    </van-popup>
+    <!-- 陪诊师弹窗层 -->
+    <van-popup v-model:show="showComponion" position="bottom" :style="{ height: '30%' }">
+        <van-picker :columns="componionColumns" @confirm="showComponionConfirm" @cancel="showComponion = false"/>
     </van-popup>
   </div>
 </template>
@@ -67,8 +81,10 @@ onMounted(async () => {
 const router = useRouter()
 const showHospital = ref(false)
 const showStartTime = ref(false)
+const showComponion = ref(false)
 const minDate = ref(new Date())
 const currentDate = ref()
+const companionName = ref()
 const { proxy:{$api} } = getCurrentInstance()
 //form数据
 const form = reactive({})
@@ -79,6 +95,11 @@ const createInfo = reactive({
 })
 const showHospColumns = computed(() => {
     return createInfo.hospitals.map(item => {
+        return { text: item.name, value: item.id }
+    })
+})
+const componionColumns = computed(() => {
+    return createInfo.companion.map(item => {
         return { text: item.name, value: item.id }
     })
 })
@@ -102,6 +123,11 @@ const showHospConfirm = (item) => {
     form.hospital_name = item.selectedOptions[0].text
     //关闭弹出层
     showHospital.value = false
+}
+const showComponionConfirm = (item) => {
+    form.companion_id = item.selectedOptions[0].value
+    companionName.value = item.selectedOptions[0].text
+    showComponion.value = false
 }
 </script>
 
