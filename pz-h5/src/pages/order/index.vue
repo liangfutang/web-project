@@ -10,7 +10,7 @@
         <van-tab title="已取消" name="4"/>
     </van-tabs>
     <!-- 订单列表 -->
-    <van-row v-for="item in order" :key="item.out_trade_no">
+    <van-row @click="goDetail(item)" v-for="item in order" :key="item.out_trade_no">
         <van-col span="5">
             <van-image width="50" height="50" radius="5" :src="item.serviceImg" />
         </van-col>
@@ -66,6 +66,9 @@ const getOrderList = async (state) => {
 }
 const onClickTab = (item) => {
     getOrderList(item.name)
+}
+const goDetail = (item) => {
+    router.push(`/detail?oid=${item.out_trade_no}`)
 }
 </script>
 
