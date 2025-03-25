@@ -84,6 +84,13 @@
     <van-popup v-model:show="showComponion" position="bottom" :style="{ height: '30%' }">
         <van-picker :columns="componionColumns" @confirm="showComponionConfirm" @cancel="showComponion = false"/>
     </van-popup>
+    <!-- 支付二维码弹窗 -->
+    <van-dialog :show-confirm-button="false" v-model:show="showCode">
+        <van-icon name="cross" class="close" @click="closeCode" />
+        <div>微信支付</div>
+        <van-image width="150" height="150" :src="codeImg" />
+        <div>请使用本人微信扫码支付</div>
+    </van-dialog>
   </div>
 </template>
 
@@ -91,6 +98,7 @@
 import { useRouter } from 'vue-router'
 import StatusBar from '../../components/statusBar.vue'
 import { getCurrentInstance, onMounted, reactive, ref, computed } from 'vue'
+import Qrcode from 'qrcode'
 
 onMounted(async () => {
     const { data } = await $api.h5Companion()
@@ -105,6 +113,8 @@ const showComponion = ref(false)
 const minDate = ref(new Date())
 const currentDate = ref()
 const companionName = ref()
+const showCode = ref(false)
+const codeImg = ref('')
 const { proxy:{$api} } = getCurrentInstance()
 //form数据
 const form = reactive({})
@@ -168,6 +178,14 @@ const submit = async () => {
     }
     //创建订单,将用户在表单中输入的数据作为参数发送，等待后端处理，并获取处理结果。
     const { data: orderRes } = await $api.createOrder(form)
+    Qrcode.toDataURL(orderRes.data.wx_code).then((url) => {
+        showCode.value = true
+        codeImg.value = url
+    })
+}
+const closeCode = () => {
+    showCode.value = false
+    router.push('/order')
 }
 </script>
 
