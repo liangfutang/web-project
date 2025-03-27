@@ -11,6 +11,7 @@
     <view class="text-area" v-for="item in list" :key="item.name">
       <text class="title">{{ item.name }}:{{ item.value }}</text>
     </view>
+    <navbar/>
   </view>
 </template>
 
