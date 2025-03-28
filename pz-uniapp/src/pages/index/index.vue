@@ -1,72 +1,93 @@
 <template>
-  <view class="content">
-    <image class="logo" src="/static/logo.png"></image>
-    <view class="text-area">
-      <text class="title">{{ title }} 111</text>
-    </view>
-    <button @click="handleCount">点我累加</button>
-    <view class="text-area">
-      <text class="title">水果总数：{{ total }}</text>
-    </view>
-    <view class="text-area" v-for="item in list" :key="item.name">
-      <text class="title">{{ item.name }}:{{ item.value }}</text>
-    </view>
-    <navbar/>
+  <view class="nav">
+    <view :style="'height:' + status + 'rpx;'"></view>
+    <view :style="{height:navHeight + 'rpx'}"></view>
   </view>
 </template>
 
 <script setup>
 import { onLoad } from '@dcloudio/uni-app'
-import { ref,reactive,computed } from 'vue'
+import { ref,reactive,onBeforeMount } from 'vue'
 
-onLoad(() => {
-  console.log('onLoad加载')
+onBeforeMount(() => {
+  setNavSize()
+  setStyle()
 })
 
-const title = ref('Hello')
-const list = reactive([
-  {name:'橘子', value: 1},
-  {name:'苹果', value: 2},
-  {name:'香蕉', value: 3}
-])
-const total = computed(()=>{
-  let sum = 0
-  list.forEach(item=>{
-    sum += item.value
-  })
-  return list.reduce((tot,cur)=>tot+cur.value, 0)
-})
-const handleCount = ()=>{
-  list.forEach(item=>{
-    item.value++
-  })
+// 状态栏高度
+const status = ref(0)
+// 内容高度
+const navHeight = ref(0)
+// 背景颜色
+const containerStyle = ref('')
+// 字体样式
+const textStyle = ref('')
+// 图标的样式
+const iconStyle = ref('')
+// 接收父组件传参
+const props = defineProps({
+        background: {
+          type: String,
+          default: 'rgba(255, 255, 255, 1)'
+        },
+        color: {
+          type: String,
+          default: 'rgba(0, 0, 0, 1)'
+        },
+        fontSize: {
+          type: String,
+          default: '32'
+        },
+        iconWidth: {
+          type: String,
+          default: '116'
+        },
+        iconHeight: {
+          type: String,
+          default: '38'
+        },
+        titleText: {
+          type: String,
+          default: ''
+        },
+        isHome: {
+          type: Boolean,
+          default: false
+        },
+      titleText: {
+        type: String,
+        default: ''
+      },
+      isHome: {
+        type: Boolean,
+        default: false
+      }
+		})
+// 计算状态栏高度
+const setNavSize = () => {
+  const windowInfo = uni.getWindowInfo();
+  const deviceInfo = uni.getDeviceInfo();
+
+  // 设置状态栏高度
+  status.value = windowInfo.statusBarHeight * 2;
+  // 判断系统类型并设置导航栏高度
+  const system = deviceInfo.system; // 获取设备系统信息
+  navHeight.value = system.indexOf('iOS') !== -1 ? 88 : 96; // iOS 和 Android 的导航栏高度不同
+}
+// 样式设置
+const setStyle = () => {
+  containerStyle.value = ['background:' + props.background].join(';')
+  textStyle.value = ['color:' + props.color, 'font-size:' + props.fontSize + 'rpx'].join(';')
+  iconStyle.value = ['width:' + props.iconWidth + 'rpx', 'height:' + props.iconHeight + 'rpx'].join(';')
 }
 </script>
 
 <style lang="less" scoped>
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.logo {
-  height: 200rpx;
-  width: 200rpx;
-  margin-top: 200rpx;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 50rpx;
-}
-
-.text-area {
-  display: flex;
-  justify-content: center;
-}
-
-.title {
-  font-size: 36rpx;
-  color: #8f8f94;
+.nav {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
 }
 </style>
