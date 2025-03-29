@@ -90,7 +90,7 @@ const backOrHome = () => {
       delta: 1
     })
   } else {
-    uni.reLaunch({
+    uni.switchTab({
       url: '/pages/index/index'
     })
   }

@@ -26,6 +26,13 @@
 				"navigationBarTitleText": "",
 				"navigationBarBackgroundColor": "#FFFFFF"
 			}
+		},
+		{
+			"path": "pages/search/index",
+			"style": {
+				"navigationBarTitleText": "查询",
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"tabBar": {
