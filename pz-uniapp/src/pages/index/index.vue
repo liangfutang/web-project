@@ -1,7 +1,12 @@
 <template>
   <view class="nav">
-    <view :style="'height:' + status + 'rpx;'"></view>
-    <view :style="{height:navHeight + 'rpx'}"></view>
+    <view :style="'height:' + status + 'rpx;' + containerStyle"></view>
+    <view class="navbar" :style="{height:navHeight + 'rpx', paddingLeft:'20rpx', containerStyle}">
+      <view class="back-icon" @click="backOrHome">
+        <image v-if="pages > 1" src="../../static/navbar/ic_back.png" />
+        <image v-else src="../../static/navbar/ic_home.png" />
+      </view>
+    </view>
   </view>
 </template>
 
@@ -24,6 +29,8 @@ const containerStyle = ref('')
 const textStyle = ref('')
 // 图标的样式
 const iconStyle = ref('')
+// 当前页数
+const pages = ref(getCurrentPages().length)
 // 接收父组件传参
 const props = defineProps({
         background: {
@@ -80,6 +87,17 @@ const setStyle = () => {
   textStyle.value = ['color:' + props.color, 'font-size:' + props.fontSize + 'rpx'].join(';')
   iconStyle.value = ['width:' + props.iconWidth + 'rpx', 'height:' + props.iconHeight + 'rpx'].join(';')
 }
+const backOrHome = () => {
+  if (pages.value > 1) {
+    uni.navigateBack({
+      delta: 1
+    })
+  } else {
+    uni.reLaunch({
+      url: '/pages/index/index'
+    })
+  }
+}
 </script>
 
 <style lang="less" scoped>
@@ -89,5 +107,19 @@ const setStyle = () => {
   top: 0;
   left: 0;
   z-index: 2;
+  .navbar {
+    position: relative;
+    .back-icon {
+      display: flex;
+      align-items: center;
+      width: 64rpx;
+      height: 100%;
+      margin-left: 20rpx;
+      image {
+        width: 64rpx;
+		    height: 64rpx;
+      }
+    }
+  }
 }
 </style>
