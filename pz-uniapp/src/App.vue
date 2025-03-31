@@ -9,9 +9,13 @@ export default {
   onHide: function () {
     console.log('App Hide')
   },
+  globalData() {
+    
+  }
 }
 </script>
 
 <style>
 /*每个页面公共css */
+@import './app.css'
 </style>
