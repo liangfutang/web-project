@@ -19,11 +19,15 @@
 <script setup>
 import { ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app' 
+// import utils from '../../common/js/utils'
 
 onLoad(() => {
   setNavSize()
+  // utils.getUserInfo()
+  app.globalData.utils.getUserInfo()
 })
 
+const app = getApp()
 // 状态栏高度
 const status = ref(0)
 // 内容高度
