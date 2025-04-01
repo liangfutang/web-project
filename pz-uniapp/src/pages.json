@@ -33,6 +33,13 @@
 				"navigationBarTitleText": "查询",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/hospital/index",
+			"style": {
+				"navigationBarTitleText": "医院管理",
+				"navigationBarBackgroundColor": "#FFFFFF"
+			}
 		}
 	],
 	"tabBar": {

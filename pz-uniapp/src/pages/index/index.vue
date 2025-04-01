@@ -13,7 +13,7 @@
         <image src="../../static/resource/images/modal_closer.png" style="display:block;width:30rpx;height:30rpx;"/>
       </view>
     </view>
-    <!-- //轮播图 -->
+    <!-- 轮播图 -->
 		<view v-if="slides && slides.length > 0" class="index-swiper">
 			<swiper autoplay circular :interval="4000" :duration="500">
 				<block v-for="(item,index) in slides" :key="index">
@@ -23,11 +23,21 @@
 				</block>
 			</swiper>
 		</view>
+    <!-- 		两个快捷入口 -->
+		<view v-if="nav2s && nav2s.length > 0 " class="nav2-list">
+      <block v-for="(item,index) in nav2s" :key="index">
+        <view class="nav2-item" @click="onNav2Tap" :data-index="index" >
+          <view class="nav2-pic">
+            <image :src="item.pic_image_url" mode="widthFix"></image>
+          </view>
+        </view>
+      </block>
+		</view>
   </view>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, toRaw } from 'vue'
 import { onLoad } from '@dcloudio/uni-app' 
 // import utils from '../../common/js/utils'
 
@@ -47,6 +57,8 @@ onLoad(() => {
 					},
 					success:({data}) =>{
 						slides.value = data.slides
+            nav2s.value = data.nav2s
+						navs.value = data.navs
 					}
 				})
 			}
@@ -60,6 +72,10 @@ const status = ref(0)
 const navHeight = ref(0)
 //定义轮播图数据
 const slides = ref([])
+//快捷入口2
+const nav2s =ref([])
+//快捷入口多个
+const navs = ref([])
 
 const setNavSize = () => {
   const windowInfo = uni.getWindowInfo();
@@ -72,6 +88,19 @@ const setNavSize = () => {
   navHeight.value = system.indexOf('iOS') !== -1 ? 88 : 96; // iOS 和 Android 的导航栏高度不同
 }
 
+const onNav2Tap = (e) => {
+  const nav =	toRaw(nav2s.value)[e.currentTarget.dataset.index]
+	jump(nav,'nav2')
+}
+
+const jump = (nav,type) =>{
+	//判断是否为内部链接
+	if(nav.stype  == 1){
+		uni.navigateTo({
+			url:nav.stype_link
+		})
+	}
+}
 </script>
 
 <style lang="less" scoped>
@@ -88,6 +117,32 @@ const setNavSize = () => {
   .index-swiper swiper-item image {
     width: 100%;
     height: 100%;
+  }
+  .nav2-list {
+    margin: 10rpx 20rpx 0 20rpx;
+    .nav2-item {
+      float: left;
+      margin-top: 20rpx;
+      width: 50%;
+      text-align: center;
+      box-sizing: border-box;
+      padding: 0 5rpx;
+      .nav2-pic {
+        width: 100%;
+      }
+      .nav2-pic image {
+        display: block;
+        width: 100%;
+      }
+    }
+  }
+  .nav2-list::after {
+    content: '';
+    display: block;
+    height: 0;
+    line-height: 0;
+    clear: both;
+    visibility: hidden;
   }
 }
 </style>
