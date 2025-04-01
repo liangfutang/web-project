@@ -33,6 +33,15 @@
         </view>
       </block>
 		</view>
+    <!-- 		五个快捷入口 -->
+		<view v-if="navs && navs.length > 0 " class="nav-list">
+			<block v-for="(item,index) in navs" :key="index">
+				<view class="nav-item" @click="onNavTap" :data-index="index">
+					<view class="nav-pic"><image :src="item.pic_image_url"></image></view>
+					<view class="nav-text" :style="'color:'+(item.color ? item.color : '')">{{item.title}}</view>
+				</view>
+			</block>
+		</view>
   </view>
 </template>
 
@@ -92,7 +101,10 @@ const onNav2Tap = (e) => {
   const nav =	toRaw(nav2s.value)[e.currentTarget.dataset.index]
 	jump(nav,'nav2')
 }
-
+const onNavTap = (e) => {
+	const nav =	toRaw(navs.value)[e.currentTarget.dataset.index]
+	jump(nav,'navs')
+}
 const jump = (nav,type) =>{
 	//判断是否为内部链接
 	if(nav.stype  == 1){
@@ -143,6 +155,35 @@ const jump = (nav,type) =>{
     line-height: 0;
     clear: both;
     visibility: hidden;
+  }
+  .nav-list {
+    .nav-item {
+      float: left;
+      margin-top: 20rpx;
+      width: 20%;
+      text-align: center;
+      padding: 10rpx 0;
+      .nav-text {
+        font-size: 24rpx;
+        font-weight: bold;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+  }
+  .nav-list::after {
+    content: '';
+    display: block;
+    height: 0;
+    line-height: 0;
+    clear: both;
+    visibility: hidden;
+    }
+    .nav-pic image {
+      display: block;
+      margin: 0 auto;
+      width: 110rpx;
+      height: 110rpx;
+    }
   }
 }
 </style>

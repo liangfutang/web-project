@@ -31,14 +31,21 @@
 			"path": "pages/search/index",
 			"style": {
 				"navigationBarTitleText": "查询",
-				"navigationStyle": "custom"
+				"enablePullDownRefresh": false
 			}
 		},
 		{
 			"path": "pages/hospital/index",
 			"style": {
 				"navigationBarTitleText": "医院管理",
-				"navigationBarBackgroundColor": "#FFFFFF"
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/service/index",
+			"style": {
+				"navigationBarTitleText": "服务",
+				"enablePullDownRefresh": false
 			}
 		}
 	],
