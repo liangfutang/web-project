@@ -197,6 +197,7 @@ const jump = (nav,type) =>{
         white-space: nowrap;
         overflow: hidden;
       }
+    }
   }
   .nav-list::after {
     content: '';
@@ -205,13 +206,12 @@ const jump = (nav,type) =>{
     line-height: 0;
     clear: both;
     visibility: hidden;
-    }
-    .nav-pic image {
+  }
+  .nav-pic image {
       display: block;
       margin: 0 auto;
       width: 110rpx;
       height: 110rpx;
-    }
   }
   .hosp-list {
     margin: 10rpx 0 0 0;
