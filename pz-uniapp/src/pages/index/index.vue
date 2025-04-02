@@ -42,6 +42,26 @@
 				</view>
 			</block>
 		</view>
+    <!-- 医院列表 -->
+		<view class="weui-cells hosp-list">
+			<view class="weui-cell hosp-item weui-cell_access" v-for="(item,index) in hospitals" :key="item.id" :data-hid="item.id" @click="toHospitals">
+				<view class="weui-cell_hd">
+					<image class="hosp-avatar" :src="item.avatar_url ? item.avatar_url : '../../static/resource/images/avatar.jpg'" mode="aspectFill"></image>
+				</view>
+				<view class="weui-cell_bd">
+					<view >
+						<text class="hosp-name">{{item.name}}</text>
+					</view>
+					<view class="hosp-line">
+						<text class="hosp-rank">{{item.rank}}</text>
+						<text class="hosp-label">{{item.label}}</text>
+					</view>
+					<view class="hosp-line">
+						<text class="hosp-intro">{{item.intro}}</text>
+					</view>
+				</view>
+			</view>
+		</view>
   </view>
 </template>
 
@@ -68,6 +88,7 @@ onLoad(() => {
 						slides.value = data.slides
             nav2s.value = data.nav2s
 						navs.value = data.navs
+            hospitals.value = data.hospitals
 					}
 				})
 			}
@@ -85,6 +106,8 @@ const slides = ref([])
 const nav2s =ref([])
 //快捷入口多个
 const navs = ref([])
+// 医院列表
+const hospitals = ref([])
 
 const setNavSize = () => {
   const windowInfo = uni.getWindowInfo();
@@ -104,6 +127,11 @@ const onNav2Tap = (e) => {
 const onNavTap = (e) => {
 	const nav =	toRaw(navs.value)[e.currentTarget.dataset.index]
 	jump(nav,'navs')
+}
+const toHospitals =(e) =>{
+	uni.navigateTo({
+		url:'../hospital/index?hid=' + e.currentTarget.dataset.hid
+	})
 }
 const jump = (nav,type) =>{
 	//判断是否为内部链接
@@ -184,6 +212,63 @@ const jump = (nav,type) =>{
       width: 110rpx;
       height: 110rpx;
     }
+  }
+  .hosp-list {
+    margin: 10rpx 0 0 0;
+    background: none;
+    .hosp-item {
+      -webkit-box-align: stretch;
+      -webkit-align-items: stretch;
+      align-items: stretch;
+      padding: 20rpx;
+      margin: 20rpx;
+      border-radius: 10rpx;
+      overflow: hidden;
+      box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.04), 0 1px 6px 0 rgba(0, 0, 0, 0.04);
+      .hosp-avatar {
+        display: block;
+        width: 200rpx;
+        height: 180rpx;
+        border-radius: 10rpx;
+        overflow: hidden;
+        margin-right: 20rpx;
+      }
+      .hosp-name {
+        font-weight: bold;
+        font-size: 34rpx;  
+      }
+      .hosp-line {
+        margin-top: 5rpx;
+        .hosp-rank {
+          font-weight: bold;
+          color: #0bb585;
+          margin-right: 15rpx;
+        }
+        .hosp-label {
+          font-weight: bold;
+          color: #0ca7ae;
+          margin-right: 15rpx;
+        }
+        .hosp-intro {
+          color: #999999;
+        }
+      }
+      .hosp-line text {
+        font-size: 26rpx;
+      }
+    }
+    .hosp-item::before {
+        display: none;
+    }
+    .hosp-item::after {
+        display: none;
+    }
+  }
+  .hosp-list::before {
+      display: none;
+  }
+  .hosp-list::after {
+      display: none;
   }
 }
 </style>
