@@ -44,7 +44,7 @@
 		{
 			"path": "pages/service/index",
 			"style": {
-				"navigationBarTitleText": "服务",
+				"navigationBarTitleText": "填写服务订单",
 				"enablePullDownRefresh": false
 			}
 		}
