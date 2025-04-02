@@ -44,7 +44,7 @@
 		</view>
     <!-- 医院列表 -->
 		<view class="weui-cells hosp-list">
-			<view class="weui-cell hosp-item weui-cell_access" v-for="(item,index) in hospitals" :key="item.id" :data-hid="item.id" @click="toHospitals">
+			<view class="weui-cell hosp-item weui-cell_access" v-for="(item) in hospitals" :key="item.id" :data-hid="item.id" @click="toHospitals">
 				<view class="weui-cell_hd">
 					<image class="hosp-avatar" :src="item.avatar_url ? item.avatar_url : '../../static/resource/images/avatar.jpg'" mode="aspectFill"></image>
 				</view>
