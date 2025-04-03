@@ -296,6 +296,8 @@
 <script setup>
 import { ref, computed, reactive, toRaw  } from 'vue'
 import { onLoad } from '@dcloudio/uni-app';
+import UQRCode from 'uqrcodejs';
+
 const app = getApp()
 const popup = ref()
 const qrcodePopup = ref()
