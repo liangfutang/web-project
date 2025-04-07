@@ -38,7 +38,8 @@
 			"path": "pages/hospital/index",
 			"style": {
 				"navigationBarTitleText": "医院管理",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		},
 		{
