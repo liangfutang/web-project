@@ -7,12 +7,12 @@
         </div>
       </template>
       
-      <el-form ref="loginFormRef">
-        <el-form-item label="">
-          <el-input placeholder="用户名" />
+      <el-form :model="formData" ref="loginFormRef" :rules="rules">
+        <el-form-item prop="userName">
+          <el-input v-model="formData.userName" placeholder="用户名" />
         </el-form-item>
-        <el-form-item label="">
-          <el-input placeholder="密码" type="password" />
+        <el-form-item prop="passWord">
+          <el-input v-model="formData.passWord" placeholder="密码" type="password" />
         </el-form-item>
 
         <el-form-item>
@@ -24,14 +24,27 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
+import { login } from '../../api/index'
 
 const loginFormRef = ref()
-
-const submitForm = (formRef) => {
-  formRef.value.validate((valid) => {
+const rules = reactive({
+  userName: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+  ],
+  passWord: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+  ],
+})
+const formData = reactive({
+  userName: "",
+  passWord: "",
+})
+const submitForm = async (formEl) => {
+  if (!formEl) return;
+  formEl.validate((valid) => {
     if (valid) {
-      console.log('submit!');
+      login(formData)
     } else {
       console.log('error submit!!');
       return false;
