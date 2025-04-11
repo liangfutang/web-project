@@ -43,8 +43,12 @@ const formData = reactive({
 const validateMobile = (rule, value, callback) => {
   if (!value) {
     callback(new Error('手机号不能为空'));
-  } else if (!/^1[3-9]\d{9}$/.test(value)) {
-    callback(new Error('手机号格式错误'));
+  } else {
+    const phoneReg =
+      /^1(3[0-9]|4[01456879]|5[0-35-9]|6[2567]|7[0-8]|8[0-9]|9[0-35-9])\d{8}$/;
+    phoneReg.test(value)
+      ? callback()
+      : callback(new Error("请输入正确的手机号"));
   }
 };
 const rules = reactive({
