@@ -6,3 +6,7 @@ export const login = (data) =>{
     
     return request.post('/login',data)
 }
+// 新增用户
+export const userAdd = (data) =>{
+    return request.post('/user/save',data)
+}
