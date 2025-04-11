@@ -40,6 +40,13 @@ const formData = reactive({
   password: '',
   mobile: ''
 })
+const validateMobile = (rule, value, callback) => {
+  if (!value) {
+    callback(new Error('手机号不能为空'));
+  } else if (!/^1[3-9]\d{9}$/.test(value)) {
+    callback(new Error('手机号格式错误'));
+  }
+};
 const rules = reactive({
   name: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -48,7 +55,7 @@ const rules = reactive({
     { required: true, message: '请输入密码', trigger: 'blur' },
   ],
   mobile: [
-    { required: true, message: '请输入手机号', trigger: 'blur' },
+    { validator: validateMobile, required: true, trigger: ['blur'] },
   ]
 })
 
