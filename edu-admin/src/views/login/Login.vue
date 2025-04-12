@@ -8,11 +8,11 @@
       </template>
       
       <el-form :model="formData" ref="loginFormRef" :rules="rules">
-        <el-form-item prop="userName">
-          <el-input v-model="formData.userName" placeholder="用户名" />
+        <el-form-item prop="account">
+          <el-input v-model="formData.account" placeholder="用户名" />
         </el-form-item>
-        <el-form-item prop="passWord">
-          <el-input v-model="formData.passWord" placeholder="密码" type="password" />
+        <el-form-item prop="password">
+          <el-input v-model="formData.password" placeholder="密码" type="password" />
         </el-form-item>
 
         <el-form-item>
@@ -29,22 +29,29 @@ import { login } from '../../api/index'
 
 const loginFormRef = ref()
 const rules = reactive({
-  userName: [
+  account: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
   ],
-  passWord: [
+  password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
   ],
 })
 const formData = reactive({
-  userName: "",
-  passWord: "",
+  account: "",
+  password: "",
 })
 const submitForm = async (formEl) => {
   if (!formEl) return;
-  formEl.validate((valid) => {
+  await formEl.validate((valid) => {
     if (valid) {
-      login(formData)
+      login({account:formData.account, password:formData.password}).then(({ data }) => {
+        console.log(data, '登录结果');
+        if (data.code === 200) {
+          localStorage.setItem('edu_token', data.data.accessToken);
+        } else {
+          ElMessage.error(data.message);
+        }
+      });
     } else {
       console.log('error submit!!');
       return false;

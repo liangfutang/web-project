@@ -3,7 +3,7 @@ import axios from 'axios'
 const http = axios.create({
     baseURL: 'http://localhost:8080/edu-platform/',
     timeout: 2000,
-    headers: {'content-type': 'application/json'}
+    headers: {'content-type': 'application/json', 'app-id': 0}
   });
 
 // 添加请求拦截器

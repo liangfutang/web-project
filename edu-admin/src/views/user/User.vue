@@ -13,7 +13,7 @@
           <el-input v-model="formData.name" />
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="formData.password" />
+          <el-input v-model="formData.password" type="password" />
         </el-form-item>
         <el-form-item label="手机号" prop="mobile">
           <el-input v-model="formData.mobile" />
