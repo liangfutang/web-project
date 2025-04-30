@@ -11,7 +11,9 @@ files:
 asarUnpack:
   - resources/**
 win:
+  target: portable
   executableName: wechat-exe
+  asar: false
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
