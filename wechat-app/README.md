@@ -83,3 +83,12 @@ npm run build:linux
 
 ## 资料
 [electron-vue](https://blog.csdn.net/qq_42365534/article/details/129887911?spm=1001.2014.3001.5502)
+
+
+## 说明
+脚本初始化方式对比
+| ​对比项​ |​	electron-vite ​|​	@quick-start/electron ​|
+|---| --- | --- |
+| 核心工具 |	基于 electron-vite 的构建工具，深度集成 Vite |	官方推荐的脚手架模板，结合 electron-builder 和 electron-toolkit 开发工具包 |
+| 主要功能 |	专注于极速构建和开发体验（HMR、预配置 TypeScript 支持）|	提供完整项目模板（含示例代码、打包配置、调试工具链） |
+| 适用场景 |	快速启动轻量级 Electron 应用，开发者需自行扩展功能 |	适合中大型项目，开箱即用，内置安全通信、跨进程管理等最佳实践 |
