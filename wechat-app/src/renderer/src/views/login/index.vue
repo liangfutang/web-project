@@ -1,5 +1,8 @@
 <template>
-  <div>hello world</div>
+  <div>
+    hello world
+    <el-button type="primary">按钮</el-button>
+  </div>
 </template>
 
 <script setup>
